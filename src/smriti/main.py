@@ -1,8 +1,10 @@
 import os
-import asyncpg
 from contextlib import asynccontextmanager
+from datetime import UTC
 from typing import Literal
-from fastapi import FastAPI, HTTPException, Response, Request, Query
+
+import asyncpg
+from fastapi import FastAPI, HTTPException, Query, Request, Response
 from pydantic import AwareDatetime, BaseModel, Field
 
 DATABASE_URL = os.environ.get(
@@ -68,7 +70,7 @@ async def readyz(request: Request):
 
         return {"status": "ready"}
 
-    except Exception:
+    except (asyncpg.PostgresError, OSError, TimeoutError):
         raise HTTPException(
             status_code=503,
             detail="database unavailable",
@@ -162,7 +164,10 @@ async def get_turns(
     if has_more:
         last = items[-1]
         next_cursor = {
-            "before_sent_at": last["sent_at"].isoformat().replace("+00:00", "Z"),
+            "before_sent_at": last["sent_at"]
+            .astimezone(UTC)
+            .isoformat()
+            .replace("+00:00", "Z"),
             "before_id": last["id"],
         }
     else:
