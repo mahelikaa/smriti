@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 
 
@@ -146,6 +148,7 @@ async def test_pagination_walk_returns_every_turn_once(client):
     request_count = 0
 
     while True:
+        assert request_count < 10, "pagination did not terminate"
         response = await client.get(
             "/v1/users/alice/turns",
             params={"limit": 2, **cursor},
@@ -209,3 +212,22 @@ async def test_readyz_returns_200_when_db_up(client):
     response = await client.get("/readyz")
     assert response.status_code == 200
     assert response.json() == {"status": "ready"}
+
+
+async def test_concurrent_identical_posts_create_one_row(client):
+    responses = await asyncio.gather(
+        *[
+            client.post(
+                "/v1/users/alice/turns",
+                json=make_payload(),
+            )
+            for _ in range(50)
+        ]
+    )
+    status_codes = sorted(r.status_code for r in responses)
+    assert status_codes == [200] * 49 + [201]
+    ids = {r.json()["id"] for r in responses}
+    assert len(ids) == 1
+    response = await client.get("/v1/users/alice/turns")
+    assert response.status_code == 200
+    assert len(response.json()["items"]) == 1
