@@ -148,7 +148,9 @@ async def test_pagination_walk_returns_every_turn_once(client):
     request_count = 0
 
     while True:
-        assert request_count < 10, "pagination did not terminate"
+        assert request_count < 10, (
+            "pagination did not terminate"
+        )  # can use 3 too since 5/2=3.
         response = await client.get(
             "/v1/users/alice/turns",
             params={"limit": 2, **cursor},

@@ -5,11 +5,19 @@ from typing import Literal
 
 import asyncpg
 from fastapi import FastAPI, HTTPException, Query, Request, Response
+from fastapi.responses import JSONResponse
 from pydantic import AwareDatetime, BaseModel, Field
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
     "postgresql://smriti:smriti@localhost:5433/smriti",
+)
+
+DB_UNAVAILABLE_ERRORS = (
+    OSError,
+    TimeoutError,
+    asyncpg.CannotConnectNowError,
+    asyncpg.InterfaceError,
 )
 
 INSERT_TURN = """
@@ -55,6 +63,21 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
+async def db_unavailable_handler(
+    request: Request,
+    exc: Exception,
+):
+    return JSONResponse(
+        status_code=503,
+        content={"detail": "database unavailable"},
+        headers={"Retry-After": "1"},
+    )
+
+
+for error_type in DB_UNAVAILABLE_ERRORS:
+    app.add_exception_handler(error_type, db_unavailable_handler)
+
+
 @app.get("/healthz")
 def healthz():
     return {"status": "ok"}
@@ -70,7 +93,7 @@ async def readyz(request: Request):
 
         return {"status": "ready"}
 
-    except (asyncpg.PostgresError, OSError, TimeoutError):
+    except (*DB_UNAVAILABLE_ERRORS, asyncpg.PostgresError):
         raise HTTPException(
             status_code=503,
             detail="database unavailable",
@@ -88,7 +111,7 @@ class TurnIn(BaseModel):
 async def create_turn(user_id: str, turn: TurnIn, request: Request, response: Response):
 
     pool = request.app.state.pool
-    async with pool.acquire() as conn:
+    async with pool.acquire(timeout=2) as conn:
         row = await conn.fetchrow(
             INSERT_TURN,
             user_id,
@@ -143,7 +166,7 @@ async def get_turns(
         )
 
     pool = request.app.state.pool
-    async with pool.acquire() as conn:
+    async with pool.acquire(timeout=2) as conn:
         if before_sent_at is None:
             rows = await conn.fetch(
                 LIST_TURNS_FIRST_PAGE,
