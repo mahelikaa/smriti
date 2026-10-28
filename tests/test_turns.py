@@ -233,3 +233,48 @@ async def test_concurrent_identical_posts_create_one_row(client):
     response = await client.get("/v1/users/alice/turns")
     assert response.status_code == 200
     assert len(response.json()["items"]) == 1
+
+
+async def test_user_id_too_long_returns_422(client):
+    user_id = "a" * 129
+
+    response = await client.post(
+        f"/v1/users/{user_id}/turns",
+        json=make_payload(),
+    )
+
+    assert response.status_code == 422
+
+
+async def test_response_has_exactly_the_public_fields(client):
+    response = await client.post(
+        "/v1/users/alice/turns",
+        json=make_payload(),
+    )
+
+    assert response.status_code == 201
+
+    assert set(response.json().keys()) == {
+        "id",
+        "user_id",
+        "external_id",
+        "role",
+        "text",
+        "sent_at",
+    }
+
+
+@pytest.mark.parametrize("role", ["user", "assistant"])
+async def test_both_roles(client, role):
+    response = await client.post(
+        "/v1/users/alice/turns",
+        json=make_payload(role=role),
+    )
+
+    assert response.status_code == 201
+
+    result = await client.get("/v1/users/alice/turns")
+
+    assert result.status_code == 200
+    assert len(result.json()["items"]) == 1
+    assert result.json()["items"][0]["role"] == role

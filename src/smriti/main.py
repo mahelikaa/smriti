@@ -4,7 +4,7 @@ from datetime import UTC
 from typing import Literal
 
 import asyncpg
-from fastapi import FastAPI, HTTPException, Query, Request, Response
+from fastapi import FastAPI, HTTPException, Path, Query, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import AwareDatetime, BaseModel, Field
 
@@ -100,15 +100,42 @@ async def readyz(request: Request):
         )
 
 
+Role = Literal["user", "assistant"]
+
+
 class TurnIn(BaseModel):
     external_id: str = Field(min_length=1, max_length=128)
-    role: Literal["user", "assistant"]
+    role: Role
     text: str = Field(min_length=1, max_length=4000)
     sent_at: AwareDatetime
 
 
-@app.post("/v1/users/{user_id}/turns")
-async def create_turn(user_id: str, turn: TurnIn, request: Request, response: Response):
+class TurnOut(BaseModel):
+    id: int
+    user_id: str
+    external_id: str
+    role: Role
+    text: str
+    sent_at: AwareDatetime
+
+
+class Cursor(BaseModel):
+    before_sent_at: str
+    before_id: int
+
+
+class TurnPage(BaseModel):
+    items: list[TurnOut]
+    next_cursor: Cursor | None
+
+
+@app.post("/v1/users/{user_id}/turns", response_model=TurnOut)
+async def create_turn(
+    turn: TurnIn,
+    request: Request,
+    response: Response,
+    user_id: str = Path(min_length=1, max_length=128),
+):
 
     pool = request.app.state.pool
     async with pool.acquire(timeout=2) as conn:
@@ -151,13 +178,13 @@ async def create_turn(user_id: str, turn: TurnIn, request: Request, response: Re
         )
 
 
-@app.get("/v1/users/{user_id}/turns")
+@app.get("/v1/users/{user_id}/turns", response_model=TurnPage)
 async def get_turns(
-    user_id: str,
     request: Request,
     limit: int = Query(50, ge=1, le=100),
     before_sent_at: AwareDatetime | None = None,
     before_id: int | None = None,
+    user_id: str = Path(min_length=1, max_length=128),
 ):
     if (before_sent_at is None) != (before_id is None):
         raise HTTPException(
