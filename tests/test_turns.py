@@ -1,6 +1,10 @@
 import asyncio
 
+import asyncpg
 import pytest
+
+from smriti import main
+from smriti.main import app
 
 
 def make_payload(**overrides):
@@ -14,12 +18,24 @@ def make_payload(**overrides):
     return payload
 
 
+async def get_extraction_jobs():
+    async with app.state.pool.acquire() as conn:
+        return await conn.fetch("SELECT * FROM extraction_jobs ORDER BY id")
+
+
 async def test_create_turn(client):
     response = await client.post("/v1/users/alice/turns", json=make_payload())
 
     assert response.status_code == 201
     assert isinstance(response.json()["id"], int)
     assert response.json()["text"] == "Hello"
+
+    jobs = await get_extraction_jobs()
+
+    assert len(jobs) == 1
+    assert jobs[0]["turn_id"] == response.json()["id"]
+    assert jobs[0]["status"] == "pending"
+    assert jobs[0]["attempts"] == 0
 
 
 async def test_identical_replay(client):
@@ -36,6 +52,9 @@ async def test_identical_replay(client):
     assert result.status_code == 200
     assert len(result.json()["items"]) == 1
 
+    jobs = await get_extraction_jobs()
+    assert len(jobs) == 1
+
 
 @pytest.mark.asyncio
 async def test_conflicting_replay(client):
@@ -50,6 +69,9 @@ async def test_conflicting_replay(client):
     result = await client.get("/v1/users/alice/turns")
     assert len(result.json()["items"]) == 1
     assert result.json()["items"][0]["text"] == "Hello"
+
+    jobs = await get_extraction_jobs()
+    assert len(jobs) == 1
 
 
 async def test_same_external_id_different_user(client):
@@ -234,6 +256,8 @@ async def test_concurrent_identical_posts_create_one_row(client):
     assert response.status_code == 200
     assert len(response.json()["items"]) == 1
 
+    assert len(await get_extraction_jobs()) == 1
+
 
 async def test_user_id_too_long_returns_422(client):
     user_id = "a" * 129
@@ -278,3 +302,24 @@ async def test_both_roles(client, role):
     assert result.status_code == 200
     assert len(result.json()["items"]) == 1
     assert result.json()["items"][0]["role"] == role
+
+
+async def test_failed_enqueue_rolls_back_turn(client, monkeypatch):
+    monkeypatch.setattr(
+        main,
+        "ENQUEUE_EXTRACTION_JOB",
+        "INSERT INTO extraction_jobs (turn_id) VALUES ($1 + 1000000)",
+    )
+
+    with pytest.raises(asyncpg.ForeignKeyViolationError):
+        await client.post(
+            "/v1/users/alice/turns",
+            json=make_payload(),
+        )
+
+    response = await client.get("/v1/users/alice/turns")
+    assert response.status_code == 200
+    assert len(response.json()["items"]) == 0
+
+    jobs = await get_extraction_jobs()
+    assert len(jobs) == 0

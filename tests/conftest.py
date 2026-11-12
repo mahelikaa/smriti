@@ -9,7 +9,7 @@ from smriti.main import app
 async def client():
     async with LifespanManager(app):
         async with app.state.pool.acquire() as conn:
-            await conn.execute("TRUNCATE turns RESTART IDENTITY")
+            await conn.execute("TRUNCATE turns, extraction_jobs RESTART IDENTITY")
 
         transport = ASGITransport(app=app)
 

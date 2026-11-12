@@ -26,6 +26,10 @@ VALUES ($1, $2, $3, $4, $5)
 ON CONFLICT (user_id, external_id) DO NOTHING
 RETURNING id, user_id, external_id, role, text, sent_at
 """
+ENQUEUE_EXTRACTION_JOB = """
+INSERT INTO extraction_jobs(turn_id)
+VALUES($1)
+"""
 SELECT_TURN = """
 SELECT id, user_id, external_id, role, text, sent_at
 FROM turns
@@ -138,7 +142,7 @@ async def create_turn(
 ):
 
     pool = request.app.state.pool
-    async with pool.acquire(timeout=2) as conn:
+    async with pool.acquire(timeout=2) as conn, conn.transaction():
         row = await conn.fetchrow(
             INSERT_TURN,
             user_id,
@@ -149,6 +153,7 @@ async def create_turn(
         )
 
         if row is not None:
+            await conn.execute(ENQUEUE_EXTRACTION_JOB, row["id"])
             response.status_code = 201
             return dict(row)
 
