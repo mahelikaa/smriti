@@ -78,8 +78,22 @@ async def db_unavailable_handler(
     )
 
 
-for error_type in DB_UNAVAILABLE_ERRORS:
-    app.add_exception_handler(error_type, db_unavailable_handler)
+class DatabaseUnavailable(Exception):
+    """The database could not be reached. The only exception mapped to 503."""
+
+
+@asynccontextmanager
+async def db_conn(request: Request):
+    # Translate connection-level errors into DatabaseUnavailable ONLY around DB
+    # access, so an OSError/TimeoutError from anywhere else surfaces as a 500.
+    try:
+        async with request.app.state.pool.acquire(timeout=2) as conn:
+            yield conn
+    except DB_UNAVAILABLE_ERRORS as e:
+        raise DatabaseUnavailable() from e
+
+
+app.add_exception_handler(DatabaseUnavailable, db_unavailable_handler)
 
 
 @app.get("/healthz")
@@ -141,8 +155,7 @@ async def create_turn(
     user_id: str = Path(min_length=1, max_length=128),
 ):
 
-    pool = request.app.state.pool
-    async with pool.acquire(timeout=2) as conn, conn.transaction():
+    async with db_conn(request) as conn, conn.transaction():
         row = await conn.fetchrow(
             INSERT_TURN,
             user_id,
@@ -197,8 +210,7 @@ async def get_turns(
             detail="before_sent_at and before_id must be provided together",
         )
 
-    pool = request.app.state.pool
-    async with pool.acquire(timeout=2) as conn:
+    async with db_conn(request) as conn:
         if before_sent_at is None:
             rows = await conn.fetch(
                 LIST_TURNS_FIRST_PAGE,

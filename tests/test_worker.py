@@ -216,3 +216,19 @@ async def test_logs_never_contain_turn_text(client, caplog):
 
     assert caplog.records  # something was logged
     assert "main Pune mein rehti hoon" not in caplog.text
+
+
+async def test_crash_message_stays_out_of_logs(client, caplog):
+    caplog.set_level(logging.DEBUG, logger="smriti.worker")
+    await post_turn(client)
+
+    secret = "main Pune mein rehti hoon"
+    await process_one(app.state.pool, FakeClient(error=RuntimeError(secret)))
+
+    async with app.state.pool.acquire() as conn:
+        job = await get_job(conn)
+
+    assert job["status"] == "dead"
+    assert secret in job["last_error"]  # detail kept in the DB
+    assert "error=RuntimeError" in caplog.text  # class name in the log
+    assert secret not in caplog.text  # but never the user text

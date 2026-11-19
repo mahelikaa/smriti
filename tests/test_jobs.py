@@ -401,3 +401,29 @@ async def test_fail_with_stale_token(client):
     assert ok is False
     assert db_job["status"] == "running"
     assert db_job["last_error"] is None
+
+
+async def test_exhausted_expired_job_goes_dead(client):
+    job = await create_and_claim(client)
+
+    async with app.state.pool.acquire() as conn:
+        # the worker process died on its 8th attempt: lease expired, no fail_job
+        await conn.execute(
+            """
+            UPDATE extraction_jobs
+            SET attempts = 8, locked_until = now() - interval '1 second'
+            WHERE id = $1
+            """,
+            job["id"],
+        )
+        reclaimed = await claim_job(conn)
+        db_job = await conn.fetchrow(
+            "SELECT status, last_error, locked_until FROM extraction_jobs"
+            " WHERE id = $1",
+            job["id"],
+        )
+
+    assert reclaimed is None
+    assert db_job["status"] == "dead"
+    assert db_job["last_error"] == "lease expired after max attempts"
+    assert db_job["locked_until"] is None

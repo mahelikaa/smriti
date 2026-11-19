@@ -323,3 +323,34 @@ async def test_failed_enqueue_rolls_back_turn(client, monkeypatch):
 
     jobs = await get_extraction_jobs()
     assert len(jobs) == 0
+
+
+class DownPool:
+    def acquire(self, timeout=None):
+        raise ConnectionRefusedError("db down")
+
+
+async def test_db_down_returns_503_on_post(client, monkeypatch):
+    monkeypatch.setattr(app.state, "pool", DownPool())
+
+    response = await client.post("/v1/users/alice/turns", json=make_payload())
+
+    assert response.status_code == 503
+    assert response.json() == {"detail": "database unavailable"}
+    assert response.headers["Retry-After"] == "1"
+
+
+async def test_db_down_returns_503_on_get(client, monkeypatch):
+    monkeypatch.setattr(app.state, "pool", DownPool())
+
+    response = await client.get("/v1/users/alice/turns")
+
+    assert response.status_code == 503
+    assert response.headers["Retry-After"] == "1"
+
+
+def test_only_database_unavailable_maps_to_503():
+    handlers = app.exception_handlers
+    assert main.DatabaseUnavailable in handlers
+    assert OSError not in handlers
+    assert TimeoutError not in handlers

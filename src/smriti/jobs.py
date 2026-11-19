@@ -13,12 +13,22 @@ SET status = 'running',
 WHERE id = (
     SELECT id FROM extraction_jobs
     WHERE (status = 'pending' AND run_after <= now())
-       OR (status = 'running' AND locked_until < now())
+       OR (status = 'running' AND locked_until < now() AND attempts < $2)
     ORDER BY id
     LIMIT 1
     FOR UPDATE SKIP LOCKED
 )
 RETURNING id, turn_id, attempts
+"""
+
+# A worker process that dies mid-job (OOM, kill -9) never calls fail_job, so the
+# job would be reclaimed forever. Once it has used all its attempts, bury it.
+DEAD_EXHAUSTED_JOBS = """
+UPDATE extraction_jobs
+SET status = 'dead',
+    locked_until = NULL,
+    last_error = 'lease expired after max attempts'
+WHERE status = 'running' AND locked_until < now() AND attempts >= $1
 """
 
 COMPLETE_JOB = """
@@ -68,7 +78,8 @@ def backoff_delay(attempts: int, jitter: float) -> float:
 
 
 async def claim_job(conn) -> asyncpg.Record | None:
-    return await conn.fetchrow(CLAIM_JOB, LEASE_SECONDS)
+    await conn.execute(DEAD_EXHAUSTED_JOBS, MAX_ATTEMPTS)
+    return await conn.fetchrow(CLAIM_JOB, LEASE_SECONDS, MAX_ATTEMPTS)
 
 
 async def complete_job(

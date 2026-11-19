@@ -34,8 +34,9 @@ async def process_one(pool, client) -> bool:
     except ExtractionError as e:
         error, retryable = str(e), e.retryable
         error_type = type(e.__cause__ or e).__name__
-    except Exception as e:
-        log.exception("job %s crashed", job["id"])
+    except Exception as e:  # noqa: BLE001 - recorded via fail_job + log line
+        # no log.exception: its message could contain user text. The class name
+        # goes in the log line below; the full message is kept in last_error (DB).
         error, retryable = f"bug: {type(e).__name__}: {e}", False
         error_type = type(e).__name__
     else:
