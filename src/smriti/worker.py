@@ -2,10 +2,11 @@ import asyncio
 import logging
 import random
 import signal
+import time
 
 import asyncpg
 
-from smriti.extract import ExtractionError, extract_memories, make_client
+from smriti.extract import ExtractionError, cost_usd, extract_memories, make_client
 from smriti.jobs import claim_job, complete_job, fail_job
 from smriti.main import DATABASE_URL
 
@@ -27,20 +28,37 @@ async def process_one(pool, client) -> bool:
         text = await conn.fetchval(GET_TURN_TEXT, job["turn_id"])
     # connection is back in the pool during the slow Claude call
 
+    start = time.perf_counter()
     try:
-        memories = await extract_memories(client, text)
+        result = await extract_memories(client, text)
     except ExtractionError as e:
         error, retryable = str(e), e.retryable
+        error_type = type(e.__cause__ or e).__name__
     except Exception as e:
         log.exception("job %s crashed", job["id"])
         error, retryable = f"bug: {type(e).__name__}: {e}", False
+        error_type = type(e).__name__
     else:
+        claude_ms = (time.perf_counter() - start) * 1000
         async with pool.acquire() as conn:
-            saved = await complete_job(conn, job["id"], job["attempts"], memories)
-        if not saved:
-            log.warning("job %s: lost the job before saving", job["id"])
+            saved = await complete_job(
+                conn, job["id"], job["attempts"], result.memories
+            )
+        log.info(
+            "job=%s outcome=%s attempts=%s claude_ms=%.0f "
+            "in_tokens=%s out_tokens=%s cost_usd=%.6f memories=%s",
+            job["id"],
+            "done" if saved else "lost",
+            job["attempts"],
+            claude_ms,
+            result.input_tokens,
+            result.output_tokens,
+            cost_usd(result.input_tokens, result.output_tokens),
+            len(result.memories),
+        )
         return True
 
+    claude_ms = (time.perf_counter() - start) * 1000
     async with pool.acquire() as conn:
         await fail_job(
             conn,
@@ -50,6 +68,15 @@ async def process_one(pool, client) -> bool:
             retryable=retryable,
             jitter=random.uniform(0.5, 1.0),
         )
+    log.info(
+        "job=%s outcome=failed retryable=%s error=%s attempts=%s claude_ms=%.0f "
+        "in_tokens=0 out_tokens=0 cost_usd=0.000000 memories=0",
+        job["id"],
+        retryable,
+        error_type,
+        job["attempts"],
+        claude_ms,
+    )
     return True
 
 

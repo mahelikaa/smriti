@@ -10,6 +10,7 @@ from smriti.extract import (
     Extraction,
     ExtractionError,
     Memory,
+    cost_usd,
     extract_memories,
 )
 
@@ -34,7 +35,11 @@ class FakeClient:
 
 def fake_response(stop_reason="end_turn", memories=None):
     parsed = None if memories is None else Extraction(memories=memories)
-    return SimpleNamespace(stop_reason=stop_reason, parsed_output=parsed)
+    return SimpleNamespace(
+        stop_reason=stop_reason,
+        parsed_output=parsed,
+        usage=SimpleNamespace(input_tokens=120, output_tokens=40),
+    )
 
 
 REQ = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
@@ -60,7 +65,9 @@ async def test_returns_memories_as_dicts():
 
     result = await extract_memories(client, "main Pune mein rehti hoon")
 
-    assert result == [{"kind": "fact", "content": "lives in Pune", "importance": 3}]
+    assert result.memories == [
+        {"kind": "fact", "content": "lives in Pune", "importance": 3}
+    ]
 
 
 async def test_sends_text_and_schema():
@@ -77,7 +84,9 @@ async def test_sends_text_and_schema():
 async def test_nothing_to_remember_returns_empty_list():
     client = FakeClient(result=fake_response(memories=[]))
 
-    assert await extract_memories(client, "hi") == []
+    result = await extract_memories(client, "hi")
+
+    assert result.memories == []
 
 
 @pytest.mark.parametrize("stop_reason", ["max_tokens", "refusal"])
@@ -117,3 +126,21 @@ async def test_api_errors_are_sorted(error, retryable):
         await extract_memories(client, "hello")
 
     assert exc.value.retryable is retryable
+
+
+def test_cost_one_million_input_tokens():
+    assert cost_usd(1_000_000, 0) == 4.0
+
+
+def test_cost_mixed():
+    # 1000 × $4/M = 0.004, 500 × $20/M = 0.010
+    assert cost_usd(1000, 500) == pytest.approx(0.014)
+
+
+async def test_usage_passes_through():
+    client = FakeClient(result=fake_response(memories=[]))
+
+    result = await extract_memories(client, "hello")
+
+    assert result.input_tokens == 120
+    assert result.output_tokens == 40

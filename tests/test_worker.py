@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from types import SimpleNamespace
 
 import anthropic
@@ -26,6 +27,7 @@ class FakeMessages:
             parsed_output=Extraction(
                 memories=[Memory(kind="fact", content=text, importance=3)]
             ),
+            usage=SimpleNamespace(input_tokens=120, output_tokens=40),
         )
 
 
@@ -176,3 +178,41 @@ async def test_worker_survives_failed_iteration(client, monkeypatch):
 
     assert calls >= 2
     assert job["status"] == "done"
+
+
+async def test_done_job_logs_one_line(client, caplog):
+    caplog.set_level(logging.INFO, logger="smriti.worker")
+    await post_turn(client)
+
+    await process_one(app.state.pool, FakeClient())
+
+    lines = [r.getMessage() for r in caplog.records if "outcome=done" in r.getMessage()]
+    assert len(lines) == 1
+    assert "in_tokens=120" in lines[0]
+    assert "out_tokens=40" in lines[0]
+    assert "memories=1" in lines[0]
+
+
+async def test_failed_job_logs_retryable(client, caplog):
+    caplog.set_level(logging.INFO, logger="smriti.worker")
+    await post_turn(client)
+    req = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+    error = anthropic.RateLimitError(
+        "slow down", response=httpx.Response(429, request=req), body=None
+    )
+
+    await process_one(app.state.pool, FakeClient(error=error))
+
+    assert "outcome=failed" in caplog.text
+    assert "retryable=True" in caplog.text
+    assert "error=RateLimitError" in caplog.text
+
+
+async def test_logs_never_contain_turn_text(client, caplog):
+    caplog.set_level(logging.INFO, logger="smriti.worker")
+    await post_turn(client)
+
+    await process_one(app.state.pool, FakeClient())
+
+    assert caplog.records  # something was logged
+    assert "main Pune mein rehti hoon" not in caplog.text
