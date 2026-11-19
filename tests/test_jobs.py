@@ -1,6 +1,7 @@
+import asyncpg
 import pytest
 
-from smriti.jobs import backoff_delay, claim_job
+from smriti.jobs import backoff_delay, claim_job, complete_job, fail_job
 from smriti.main import app
 
 
@@ -183,3 +184,220 @@ async def test_two_workers_claim_different_jobs(client):
     assert job_a["id"] != job_b["id"]
     assert job_a["attempts"] == 1
     assert job_b["attempts"] == 1
+
+
+MEMORIES = [
+    {"kind": "fact", "content": "lives in Pune", "importance": 3},
+    {"kind": "preference", "content": "hates mornings", "importance": 2},
+]
+
+
+async def create_and_claim(client, external_id="msg1"):
+    response = await client.post(
+        "/v1/users/alice/turns",
+        json={
+            "external_id": external_id,
+            "role": "user",
+            "text": "main Pune mein rehti hoon, subah se nafrat hai",
+            "sent_at": "2026-11-14T10:00:00Z",
+        },
+    )
+    assert response.status_code == 201
+
+    async with app.state.pool.acquire() as conn:
+        job = await claim_job(conn)
+
+    assert job is not None
+    return job
+
+
+async def test_complete_saves_memories(client):
+    job = await create_and_claim(client)
+
+    async with app.state.pool.acquire() as conn:
+        ok = await complete_job(conn, job["id"], job["attempts"], MEMORIES)
+        db_job = await conn.fetchrow(
+            "SELECT * FROM extraction_jobs WHERE id = $1", job["id"]
+        )
+        rows = await conn.fetch("SELECT * FROM memories ORDER BY id")
+
+    assert ok is True
+    assert db_job["status"] == "done"
+    assert db_job["locked_until"] is None
+    assert len(rows) == 2
+    assert all(r["user_id"] == "alice" for r in rows)
+    assert all(r["turn_id"] == job["turn_id"] for r in rows)
+    assert [r["kind"] for r in rows] == ["fact", "preference"]
+
+
+async def test_complete_replaces_old_memories(client):
+    job = await create_and_claim(client)
+
+    async with app.state.pool.acquire() as conn:
+        await complete_job(conn, job["id"], job["attempts"], MEMORIES)
+
+        # simulate a rerun: put the job back to running by hand
+        await conn.execute(
+            "UPDATE extraction_jobs SET status = 'running' WHERE id = $1",
+            job["id"],
+        )
+        ok = await complete_job(conn, job["id"], job["attempts"], MEMORIES[:1])
+        rows = await conn.fetch("SELECT * FROM memories")
+
+    assert ok is True
+    assert len(rows) == 1
+    assert rows[0]["content"] == "lives in Pune"
+
+
+async def test_complete_with_stale_token(client):
+    job = await create_and_claim(client)
+
+    async with app.state.pool.acquire() as conn:
+        # worker 1's lease expires, worker 2 takes the job back (attempts → 2)
+        await conn.execute(
+            "UPDATE extraction_jobs SET locked_until = now() - interval '1 second'"
+            " WHERE id = $1",
+            job["id"],
+        )
+        reclaimed = await claim_job(conn)
+        assert reclaimed["attempts"] == 2
+
+        # worker 1 comes back with its old token (attempts=1)
+        ok = await complete_job(conn, job["id"], 1, MEMORIES)
+        status = await conn.fetchval(
+            "SELECT status FROM extraction_jobs WHERE id = $1", job["id"]
+        )
+        count = await conn.fetchval("SELECT count(*) FROM memories")
+
+    assert ok is False
+    assert count == 0
+    assert status == "running"
+
+
+async def test_complete_rolls_back_on_bad_memory(client):
+    job = await create_and_claim(client)
+    bad = [{"kind": "bogus", "content": "x", "importance": 3}]
+
+    async with app.state.pool.acquire() as conn:
+        # the job is marked done first, then the INSERT hits the CHECK on kind
+        with pytest.raises(asyncpg.CheckViolationError):
+            await complete_job(conn, job["id"], job["attempts"], bad)
+
+        status = await conn.fetchval(
+            "SELECT status FROM extraction_jobs WHERE id = $1", job["id"]
+        )
+        count = await conn.fetchval("SELECT count(*) FROM memories")
+
+    assert status == "running"
+    assert count == 0
+
+
+async def test_fail_retryable(client):
+    job = await create_and_claim(client)
+
+    async with app.state.pool.acquire() as conn:
+        ok = await fail_job(
+            conn,
+            job["id"],
+            job["attempts"],
+            "429 rate limited",
+            retryable=True,
+            jitter=1.0,
+        )
+        db_job = await conn.fetchrow(
+            """
+            SELECT *,
+                   run_after > now() AS waiting,
+                   run_after <= now() + interval '3 seconds' AS not_too_far
+            FROM extraction_jobs WHERE id = $1
+            """,
+            job["id"],
+        )
+
+    assert ok is True
+    assert db_job["status"] == "pending"
+    assert db_job["waiting"] is True
+    assert db_job["not_too_far"] is True  # attempt 1, jitter 1.0 → 2 s
+    assert db_job["last_error"] == "429 rate limited"
+    assert db_job["locked_until"] is None
+
+
+async def test_fail_at_max_attempts(client):
+    response = await client.post(
+        "/v1/users/alice/turns",
+        json={
+            "external_id": "msg1",
+            "role": "user",
+            "text": "Hello",
+            "sent_at": "2026-11-14T10:00:00Z",
+        },
+    )
+    assert response.status_code == 201
+
+    async with app.state.pool.acquire() as conn:
+        # pretend 7 attempts already happened; this claim makes it 8
+        await conn.execute(
+            "UPDATE extraction_jobs SET attempts = 7 WHERE turn_id = $1",
+            response.json()["id"],
+        )
+        job = await claim_job(conn)
+        assert job["attempts"] == 8
+
+        ok = await fail_job(
+            conn,
+            job["id"],
+            job["attempts"],
+            "529 overloaded",
+            retryable=True,
+            jitter=1.0,
+        )
+        status = await conn.fetchval(
+            "SELECT status FROM extraction_jobs WHERE id = $1", job["id"]
+        )
+
+    assert ok is True
+    assert status == "dead"
+
+
+async def test_fail_not_retryable(client):
+    job = await create_and_claim(client)
+
+    async with app.state.pool.acquire() as conn:
+        ok = await fail_job(
+            conn,
+            job["id"],
+            job["attempts"],
+            "400 invalid request",
+            retryable=False,
+            jitter=1.0,
+        )
+        status = await conn.fetchval(
+            "SELECT status FROM extraction_jobs WHERE id = $1", job["id"]
+        )
+
+    assert ok is True
+    assert job["attempts"] == 1
+    assert status == "dead"
+
+
+async def test_fail_with_stale_token(client):
+    job = await create_and_claim(client)
+
+    async with app.state.pool.acquire() as conn:
+        await conn.execute(
+            "UPDATE extraction_jobs SET locked_until = now() - interval '1 second'"
+            " WHERE id = $1",
+            job["id"],
+        )
+        reclaimed = await claim_job(conn)
+        assert reclaimed["attempts"] == 2
+
+        ok = await fail_job(conn, job["id"], 1, "timeout", retryable=True, jitter=1.0)
+        db_job = await conn.fetchrow(
+            "SELECT status, last_error FROM extraction_jobs WHERE id = $1",
+            job["id"],
+        )
+
+    assert ok is False
+    assert db_job["status"] == "running"
+    assert db_job["last_error"] is None
