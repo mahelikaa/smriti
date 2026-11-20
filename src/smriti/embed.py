@@ -17,6 +17,12 @@ class EmbeddingError(Exception):
         self.retryable = retryable
 
 
+def to_pgvector(v: list[float] | None) -> str | None:
+    if v is None:
+        return None
+    return "[" + ",".join(map(str, v)) + "]"
+
+
 def make_client(transport: httpx.AsyncBaseTransport | None = None) -> httpx.AsyncClient:
     return httpx.AsyncClient(
         base_url=VOYAGE_BASE_URL,

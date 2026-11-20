@@ -1,13 +1,13 @@
 import asyncio
-import json
 import logging
 from types import SimpleNamespace
 
 import anthropic
 import httpx
+from fakes import fake_embedder
 
 from smriti import worker
-from smriti.embed import EMBED_DIMS, EMBED_MODEL, VOYAGE_BASE_URL
+from smriti.embed import EMBED_DIMS, EMBED_MODEL
 from smriti.extract import Extraction, Memory
 from smriti.main import app
 from smriti.worker import process_one, run_worker
@@ -36,24 +36,6 @@ class FakeMessages:
 class FakeClient:
     def __init__(self, error=None):
         self.messages = FakeMessages(error=error)
-
-
-def fake_embedder(status=200, calls=None):
-    def handler(request):
-        body = json.loads(request.content)
-        if calls is not None:
-            calls.append(body)
-        if status != 200:
-            return httpx.Response(status)
-        data = [
-            {"index": i, "embedding": [0.1] * EMBED_DIMS}
-            for i in range(len(body["input"]))
-        ]
-        return httpx.Response(200, json={"data": data})
-
-    return httpx.AsyncClient(
-        base_url=VOYAGE_BASE_URL, transport=httpx.MockTransport(handler)
-    )
 
 
 async def post_turn(client, external_id="msg1", text="main Pune mein rehti hoon"):

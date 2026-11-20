@@ -1,5 +1,7 @@
 import asyncpg
 
+from smriti.embed import to_pgvector
+
 LEASE_SECONDS = 60
 MAX_ATTEMPTS = 8
 BACKOFF_BASE = 2
@@ -66,12 +68,6 @@ SET status = 'dead',
     last_error = $3
 WHERE id = $1 AND attempts = $2 AND status = 'running'
 """
-
-
-def to_pgvector(v: list[float] | None) -> str | None:
-    if v is None:
-        return None
-    return "[" + ",".join(map(str, v)) + "]"
 
 
 def backoff_delay(attempts: int, jitter: float) -> float:

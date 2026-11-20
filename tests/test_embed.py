@@ -3,7 +3,14 @@ import json
 import httpx
 import pytest
 
-from smriti.embed import EMBED_DIMS, EMBED_MODEL, EmbeddingError, embed, make_client
+from smriti.embed import (
+    EMBED_DIMS,
+    EMBED_MODEL,
+    EmbeddingError,
+    embed,
+    make_client,
+    to_pgvector,
+)
 
 
 @pytest.fixture(autouse=True)
@@ -109,3 +116,8 @@ async def test_malformed_body_is_not_retryable():
     with pytest.raises(EmbeddingError) as exc:
         await embed(client_with(handler), ["hi"], "document")
     assert exc.value.retryable is False
+
+
+def test_to_pgvector():
+    assert to_pgvector([0.5, -1.0, 1e-05]) == "[0.5,-1.0,1e-05]"
+    assert to_pgvector(None) is None
