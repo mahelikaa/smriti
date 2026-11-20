@@ -50,6 +50,16 @@ INSERT_MEMORY = """
 INSERT INTO memories (user_id, turn_id, kind, content, importance,
                       embedding, embedding_model)
 SELECT user_id, id, $2, $3, $4, $5::vector, $6 FROM turns WHERE id = $1
+RETURNING id
+"""
+
+SUPERSEDE_MEMORIES = """
+UPDATE memories
+SET superseded_by = $1
+WHERE id = ANY($2::bigint[])
+  AND user_id = (SELECT user_id FROM turns WHERE id = $3)
+  AND turn_id <> $3
+  AND superseded_by IS NULL
 """
 
 RETRY_JOB = """
@@ -98,20 +108,20 @@ async def complete_job(
 
         turn_id = row["turn_id"]
         await conn.execute(DELETE_TURN_MEMORIES, turn_id)
-        await conn.executemany(
-            INSERT_MEMORY,
-            [
-                (
-                    turn_id,
-                    m["kind"],
-                    m["content"],
-                    m["importance"],
-                    to_pgvector(m.get("embedding")),
-                    m.get("embedding_model"),
+        for m in memories:
+            memory_id = await conn.fetchval(
+                INSERT_MEMORY,
+                turn_id,
+                m["kind"],
+                m["content"],
+                m["importance"],
+                to_pgvector(m.get("embedding")),
+                m.get("embedding_model"),
+            )
+            if m.get("supersedes"):
+                await conn.execute(
+                    SUPERSEDE_MEMORIES, memory_id, m["supersedes"], turn_id
                 )
-                for m in memories
-            ],
-        )
         return True
 
 

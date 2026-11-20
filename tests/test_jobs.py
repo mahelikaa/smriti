@@ -427,3 +427,24 @@ async def test_exhausted_expired_job_goes_dead(client):
     assert db_job["status"] == "dead"
     assert db_job["last_error"] == "lease expired after max attempts"
     assert db_job["locked_until"] is None
+
+
+async def test_complete_never_supersedes_another_users_memory(client):
+    async with app.state.pool.acquire() as conn:
+        bob_turn = await conn.fetchval(
+            """INSERT INTO turns (user_id, external_id, role, text, sent_at)
+               VALUES ('bob', 'b1', 'user', 'hi', now()) RETURNING id"""
+        )
+        bob_memory = await conn.fetchval(
+            """INSERT INTO memories (user_id, turn_id, kind, content, importance)
+               VALUES ('bob', $1, 'fact', 'Lives in Delhi', 3) RETURNING id""",
+            bob_turn,
+        )
+    job = await create_and_claim(client)
+    memory = {**MEMORIES[0], "supersedes": [bob_memory]}
+
+    async with app.state.pool.acquire() as conn:
+        await complete_job(conn, job["id"], job["attempts"], [memory])
+        bob = await conn.fetchrow("SELECT * FROM memories WHERE id = $1", bob_memory)
+
+    assert bob["superseded_by"] is None

@@ -18,6 +18,9 @@ Only keep things worth remembering in a future conversation:
 facts, preferences, events, relationships. Skip greetings, small talk,
 and anything about the assistant. If nothing is worth remembering,
 return an empty list. importance: 1 = trivia, 5 = core to who they are.
+You may also get KNOWN MEMORIES, each with an id. If a new memory makes a
+known one no longer true (they moved, changed jobs, broke up), put the old
+id in supersedes. Only use ids from the list. Do not repeat known memories.
 """
 
 RETRYABLE_ERRORS = (
@@ -31,6 +34,7 @@ class Memory(BaseModel):
     kind: Literal["fact", "preference", "event", "relationship"]
     content: str = Field(min_length=1, max_length=500)
     importance: int = Field(ge=1, le=5)
+    supersedes: list[int] = Field(default_factory=list)
 
 
 class Extraction(BaseModel):
@@ -56,17 +60,26 @@ def cost_usd(input_tokens: int, output_tokens: int) -> float:
     ) / 1_000_000
 
 
+def build_prompt(text: str, known: list[dict]) -> str:
+    if not known:
+        return text
+    lines = "\n".join(f"[{m['id']}] {m['content']}" for m in known)
+    return f"KNOWN MEMORIES:\n{lines}\n\nNEW MESSAGE:\n{text}"
+
+
 def make_client() -> anthropic.AsyncAnthropic:
     return anthropic.AsyncAnthropic(max_retries=0, timeout=30.0)
 
 
-async def extract_memories(client, text: str) -> ExtractResult:
+async def extract_memories(
+    client, text: str, known: list[dict] | None = None
+) -> ExtractResult:
     try:
         response = await client.messages.parse(
             model=MODEL,
             max_tokens=MAX_TOKENS,
             system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": text}],
+            messages=[{"role": "user", "content": build_prompt(text, known or [])}],
             output_format=Extraction,
             output_config={"effort": "low"},
         )

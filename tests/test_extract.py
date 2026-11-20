@@ -66,7 +66,7 @@ async def test_returns_memories_as_dicts():
     result = await extract_memories(client, "main Pune mein rehti hoon")
 
     assert result.memories == [
-        {"kind": "fact", "content": "lives in Pune", "importance": 3}
+        {"kind": "fact", "content": "lives in Pune", "importance": 3, "supersedes": []}
     ]
 
 
@@ -144,3 +144,26 @@ async def test_usage_passes_through():
 
     assert result.input_tokens == 120
     assert result.output_tokens == 40
+
+
+async def test_sends_known_memories_with_ids():
+    client = FakeClient(result=fake_response(memories=[]))
+    known = [{"id": 7, "content": "Lives in Gurgaon"}]
+
+    await extract_memories(client, "ab Bangalore mein hoon", known)
+
+    content = client.messages.calls[0]["messages"][0]["content"]
+    assert content == (
+        "KNOWN MEMORIES:\n[7] Lives in Gurgaon\n\nNEW MESSAGE:\nab Bangalore mein hoon"
+    )
+
+
+async def test_supersedes_passes_through():
+    memory = Memory(
+        kind="fact", content="Lives in Bangalore", importance=3, supersedes=[7]
+    )
+    client = FakeClient(result=fake_response(memories=[memory]))
+
+    result = await extract_memories(client, "ab Bangalore mein hoon")
+
+    assert result.memories[0]["supersedes"] == [7]

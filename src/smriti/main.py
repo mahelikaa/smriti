@@ -59,7 +59,7 @@ SEARCH_MEMORIES = """
 SELECT id, kind, content, importance, created_at,
        1 - (embedding <=> $2::vector) AS score
 FROM memories
-WHERE user_id = $1 AND embedding_model = $3
+WHERE user_id = $1 AND embedding_model = $3 AND superseded_by IS NULL
 ORDER BY embedding <=> $2::vector
 LIMIT $4
 """

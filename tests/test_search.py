@@ -113,3 +113,19 @@ async def test_bad_params_are_422(client, params):
     response = await client.get("/v1/users/alice/memories/search", params=params)
 
     assert response.status_code == 422
+
+
+async def test_skips_superseded_memories(client, search_calls):
+    await add_memory("alice", "Wedding is in March")
+    await add_memory("alice", "Wedding moved to December")
+    async with app.state.pool.acquire() as conn:
+        await conn.execute(
+            """UPDATE memories SET superseded_by = (
+                   SELECT id FROM memories WHERE content = 'Wedding moved to December')
+               WHERE content = 'Wedding is in March'"""
+        )
+
+    response = await search(client, "shaadi")
+
+    contents = [item["content"] for item in response.json()["items"]]
+    assert contents == ["Wedding moved to December"]

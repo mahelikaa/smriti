@@ -4,18 +4,19 @@ from types import SimpleNamespace
 
 import anthropic
 import httpx
-from fakes import fake_embedder
+from fakes import constant_vector, fake_embedder
 
 from smriti import worker
-from smriti.embed import EMBED_DIMS, EMBED_MODEL
+from smriti.embed import EMBED_DIMS, EMBED_MODEL, to_pgvector
 from smriti.extract import Extraction, Memory
 from smriti.main import app
 from smriti.worker import process_one, run_worker
 
 
 class FakeMessages:
-    def __init__(self, error=None):
+    def __init__(self, error=None, supersedes=None):
         self.error = error
+        self.supersedes = supersedes or []
         self.calls = []
 
     async def parse(self, **kwargs):
@@ -23,19 +24,20 @@ class FakeMessages:
         await asyncio.sleep(0.01)  # pretend Claude takes time
         if self.error:
             raise self.error
-        text = kwargs["messages"][0]["content"]
+        text = kwargs["messages"][0]["content"].split("NEW MESSAGE:\n")[-1]
+        memory = Memory(
+            kind="fact", content=text, importance=3, supersedes=self.supersedes
+        )
         return SimpleNamespace(
             stop_reason="end_turn",
-            parsed_output=Extraction(
-                memories=[Memory(kind="fact", content=text, importance=3)]
-            ),
+            parsed_output=Extraction(memories=[memory]),
             usage=SimpleNamespace(input_tokens=120, output_tokens=40),
         )
 
 
 class FakeClient:
-    def __init__(self, error=None):
-        self.messages = FakeMessages(error=error)
+    def __init__(self, error=None, supersedes=None):
+        self.messages = FakeMessages(error=error, supersedes=supersedes)
 
 
 async def post_turn(client, external_id="msg1", text="main Pune mein rehti hoon"):
@@ -254,13 +256,12 @@ async def test_success_saves_vector_and_model(client):
             "SELECT vector_dims(embedding) AS dims, embedding_model FROM memories"
         )
 
-    assert calls == [
-        {
-            "input": ["main Pune mein rehti hoon"],
-            "model": EMBED_MODEL,
-            "input_type": "document",
-        }
-    ]
+    assert calls[0]["input_type"] == "query"
+    assert calls[1] == {
+        "input": ["main Pune mein rehti hoon"],
+        "model": EMBED_MODEL,
+        "input_type": "document",
+    }
     assert row["dims"] == EMBED_DIMS
     assert row["embedding_model"] == EMBED_MODEL
 
@@ -268,7 +269,9 @@ async def test_success_saves_vector_and_model(client):
 async def test_embed_rate_limit_retries_and_saves_nothing(client):
     await post_turn(client)
 
-    await process_one(app.state.pool, FakeClient(), fake_embedder(status=429))
+    await process_one(
+        app.state.pool, FakeClient(), fake_embedder(status=429, fail_on="document")
+    )
 
     async with app.state.pool.acquire() as conn:
         job = await get_job(conn)
@@ -282,7 +285,9 @@ async def test_embed_rate_limit_retries_and_saves_nothing(client):
 async def test_embed_bad_key_goes_dead(client):
     await post_turn(client)
 
-    await process_one(app.state.pool, FakeClient(), fake_embedder(status=401))
+    await process_one(
+        app.state.pool, FakeClient(), fake_embedder(status=401, fail_on="document")
+    )
 
     async with app.state.pool.acquire() as conn:
         job = await get_job(conn)
@@ -295,7 +300,85 @@ async def test_embed_failure_logs_stage_and_claude_tokens(client, caplog):
     caplog.set_level(logging.INFO, logger="smriti.worker")
     await post_turn(client)
 
-    await process_one(app.state.pool, FakeClient(), fake_embedder(status=503))
+    await process_one(
+        app.state.pool, FakeClient(), fake_embedder(status=503, fail_on="document")
+    )
 
     assert "outcome=failed stage=embed" in caplog.text
     assert "in_tokens=120" in caplog.text
+
+
+async def add_known_memory(user_id, content):
+    async with app.state.pool.acquire() as conn:
+        turn_id = await conn.fetchval(
+            """INSERT INTO turns (user_id, external_id, role, text, sent_at)
+               VALUES ($1, $2, 'user', 'old', now()) RETURNING id""",
+            user_id,
+            f"old-{content}",
+        )
+        return await conn.fetchval(
+            """INSERT INTO memories (user_id, turn_id, kind, content, importance,
+                                     embedding, embedding_model)
+               VALUES ($1, $2, 'fact', $3, 3, $4::vector, $5) RETURNING id""",
+            user_id,
+            turn_id,
+            content,
+            to_pgvector(constant_vector(content)),
+            EMBED_MODEL,
+        )
+
+
+async def test_recall_failure_retries_before_calling_claude(client):
+    await post_turn(client)
+    fake = FakeClient()
+
+    await process_one(app.state.pool, fake, fake_embedder(status=503, fail_on="query"))
+
+    async with app.state.pool.acquire() as conn:
+        job = await get_job(conn)
+
+    assert job["status"] == "pending"
+    assert job["last_error"] == "recall: http 503"
+    assert fake.messages.calls == []
+
+
+async def test_new_fact_supersedes_known_memory(client):
+    old_id = await add_known_memory("alice", "Lives in Gurgaon")
+    await post_turn(client, text="ab main Bangalore shift ho gayi")
+    fake = FakeClient(supersedes=[old_id])
+
+    await process_one(app.state.pool, fake, fake_embedder())
+
+    async with app.state.pool.acquire() as conn:
+        old = await conn.fetchrow("SELECT * FROM memories WHERE id = $1", old_id)
+        new_id = await conn.fetchval(
+            "SELECT id FROM memories WHERE content = 'ab main Bangalore shift ho gayi'"
+        )
+
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+    assert f"[{old_id}] Lives in Gurgaon" in prompt
+    assert old["superseded_by"] == new_id
+
+
+async def test_ignores_supersede_ids_it_was_not_shown(client):
+    async with app.state.pool.acquire() as conn:
+        turn_id = await conn.fetchval(
+            """INSERT INTO turns (user_id, external_id, role, text, sent_at)
+               VALUES ('alice', 'old', 'user', 'old', now()) RETURNING id"""
+        )
+        hidden_id = await conn.fetchval(
+            """INSERT INTO memories (user_id, turn_id, kind, content, importance)
+               VALUES ('alice', $1, 'fact', 'Lives in Delhi', 3) RETURNING id""",
+            turn_id,
+        )
+    await post_turn(client)
+    fake = FakeClient(supersedes=[hidden_id])
+
+    await process_one(app.state.pool, fake, fake_embedder())
+
+    async with app.state.pool.acquire() as conn:
+        hidden = await conn.fetchrow("SELECT * FROM memories WHERE id = $1", hidden_id)
+
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+    assert "Lives in Delhi" not in prompt
+    assert hidden["superseded_by"] is None

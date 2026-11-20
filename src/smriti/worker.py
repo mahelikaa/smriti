@@ -7,22 +7,32 @@ import time
 import asyncpg
 
 from smriti import embed as embedding
-from smriti.embed import EMBED_MODEL, EmbeddingError
+from smriti.embed import EMBED_MODEL, EmbeddingError, to_pgvector
 from smriti.extract import ExtractionError, cost_usd, extract_memories, make_client
 from smriti.jobs import claim_job, complete_job, fail_job
-from smriti.main import DATABASE_URL
+from smriti.main import DATABASE_URL, DB_UNAVAILABLE_ERRORS, SEARCH_MEMORIES
 
 log = logging.getLogger("smriti.worker")
 
 POLL_SECONDS = 1.0
+KNOWN_LIMIT = 10
 
-GET_TURN_TEXT = """
-SELECT text FROM turns WHERE id = $1
+GET_TURN = """
+SELECT user_id, text FROM turns WHERE id = $1
 """
 
 
 def ms_since(start: float) -> float:
     return (time.perf_counter() - start) * 1000
+
+
+async def recall_known(pool, embed_client, user_id: str, text: str) -> list[dict]:
+    [vector] = await embedding.embed(embed_client, [text], "query")
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            SEARCH_MEMORIES, user_id, to_pgvector(vector), EMBED_MODEL, KNOWN_LIMIT
+        )
+    return [{"id": r["id"], "content": r["content"]} for r in rows]
 
 
 async def process_one(pool, client, embed_client) -> bool:
@@ -31,14 +41,18 @@ async def process_one(pool, client, embed_client) -> bool:
         job = await claim_job(conn)
         if job is None:
             return False
-        text = await conn.fetchval(GET_TURN_TEXT, job["turn_id"])
+        turn = await conn.fetchrow(GET_TURN, job["turn_id"])
 
-    stage = "extract"
+    stage = "recall"
     claude_ms = embed_ms = 0.0
     in_tokens = out_tokens = 0
     start = time.perf_counter()
     try:
-        result = await extract_memories(client, text)
+        known = await recall_known(pool, embed_client, turn["user_id"], turn["text"])
+
+        stage = "extract"
+        start = time.perf_counter()
+        result = await extract_memories(client, turn["text"], known)
         claude_ms = ms_since(start)
         in_tokens, out_tokens = result.input_tokens, result.output_tokens
 
@@ -50,14 +64,23 @@ async def process_one(pool, client, embed_client) -> bool:
     except (ExtractionError, EmbeddingError) as e:
         error, retryable = f"{stage}: {e}", e.retryable
         error_type = type(e.__cause__ or e).__name__
+    except DB_UNAVAILABLE_ERRORS as e:
+        error, retryable = f"{stage}: database unavailable", True
+        error_type = type(e).__name__
     except Exception as e:  # noqa: BLE001 - recorded via fail_job + log line
         # no log.exception: its message could contain user text. The class name
         # goes in the log line below; the full message is kept in last_error (DB).
         error, retryable = f"bug: {type(e).__name__}: {e}", False
         error_type = type(e).__name__
     else:
+        known_ids = {k["id"] for k in known}
         memories = [
-            {**m, "embedding": v, "embedding_model": EMBED_MODEL}
+            {
+                **m,
+                "supersedes": [i for i in m["supersedes"] if i in known_ids],
+                "embedding": v,
+                "embedding_model": EMBED_MODEL,
+            }
             for m, v in zip(result.memories, vectors, strict=True)
         ]
         async with pool.acquire() as conn:
@@ -79,7 +102,7 @@ async def process_one(pool, client, embed_client) -> bool:
 
     if stage == "extract":
         claude_ms = ms_since(start)
-    else:
+    elif stage == "embed":
         embed_ms = ms_since(start)
     async with pool.acquire() as conn:
         await fail_job(
