@@ -1,8 +1,12 @@
+import os
+
 import pytest_asyncio
 from asgi_lifespan import LifespanManager
 from httpx import ASGITransport, AsyncClient
 
 from smriti.main import app
+
+os.environ["VOYAGE_API_KEY"] = "test-key"
 
 
 @pytest_asyncio.fixture

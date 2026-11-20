@@ -8,6 +8,9 @@ from fastapi import FastAPI, HTTPException, Path, Query, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import AwareDatetime, BaseModel, Field
 
+from smriti import embed as embedding
+from smriti.embed import EMBED_MODEL, EmbeddingError, to_pgvector
+
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
     "postgresql://smriti:smriti@localhost:5433/smriti",
@@ -52,6 +55,15 @@ ORDER BY sent_at DESC, id DESC
 LIMIT $4
 """
 
+SEARCH_MEMORIES = """
+SELECT id, kind, content, importance, created_at,
+       1 - (embedding <=> $2::vector) AS score
+FROM memories
+WHERE user_id = $1 AND embedding_model = $3
+ORDER BY embedding <=> $2::vector
+LIMIT $4
+"""
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -60,7 +72,9 @@ async def lifespan(app: FastAPI):
         min_size=1,
         max_size=10,
     )
+    app.state.embed_client = embedding.make_client()
     yield
+    await app.state.embed_client.aclose()
     await app.state.pool.close()
 
 
@@ -93,7 +107,18 @@ async def db_conn(request: Request):
         raise DatabaseUnavailable() from e
 
 
+async def embedding_error_handler(request: Request, exc: EmbeddingError):
+    if exc.retryable:
+        return JSONResponse(
+            status_code=503,
+            content={"detail": "embedding service unavailable"},
+            headers={"Retry-After": "1"},
+        )
+    return JSONResponse(status_code=502, content={"detail": "embedding service error"})
+
+
 app.add_exception_handler(DatabaseUnavailable, db_unavailable_handler)
+app.add_exception_handler(EmbeddingError, embedding_error_handler)
 
 
 @app.get("/healthz")
@@ -244,3 +269,31 @@ async def get_turns(
         "items": items,
         "next_cursor": next_cursor,
     }
+
+
+class MemoryHit(BaseModel):
+    id: int
+    kind: str
+    content: str
+    importance: int
+    created_at: AwareDatetime
+    score: float
+
+
+class MemorySearch(BaseModel):
+    items: list[MemoryHit]
+
+
+@app.get("/v1/users/{user_id}/memories/search", response_model=MemorySearch)
+async def search_memories(
+    request: Request,
+    q: str = Query(min_length=1, max_length=500),
+    k: int = Query(5, ge=1, le=20),
+    user_id: str = Path(min_length=1, max_length=128),
+):
+    [query_vector] = await embedding.embed(request.app.state.embed_client, [q], "query")
+    async with db_conn(request) as conn:
+        rows = await conn.fetch(
+            SEARCH_MEMORIES, user_id, to_pgvector(query_vector), EMBED_MODEL, k
+        )
+    return {"items": [dict(row) for row in rows]}
