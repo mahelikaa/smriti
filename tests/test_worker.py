@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 from types import SimpleNamespace
 
@@ -6,6 +7,7 @@ import anthropic
 import httpx
 
 from smriti import worker
+from smriti.embed import EMBED_DIMS, EMBED_MODEL, VOYAGE_BASE_URL
 from smriti.extract import Extraction, Memory
 from smriti.main import app
 from smriti.worker import process_one, run_worker
@@ -36,6 +38,24 @@ class FakeClient:
         self.messages = FakeMessages(error=error)
 
 
+def fake_embedder(status=200, calls=None):
+    def handler(request):
+        body = json.loads(request.content)
+        if calls is not None:
+            calls.append(body)
+        if status != 200:
+            return httpx.Response(status)
+        data = [
+            {"index": i, "embedding": [0.1] * EMBED_DIMS}
+            for i in range(len(body["input"]))
+        ]
+        return httpx.Response(200, json={"data": data})
+
+    return httpx.AsyncClient(
+        base_url=VOYAGE_BASE_URL, transport=httpx.MockTransport(handler)
+    )
+
+
 async def post_turn(client, external_id="msg1", text="main Pune mein rehti hoon"):
     response = await client.post(
         "/v1/users/alice/turns",
@@ -54,13 +74,13 @@ async def get_job(conn):
 
 
 async def test_empty_queue_returns_false(client):
-    assert await process_one(app.state.pool, FakeClient()) is False
+    assert await process_one(app.state.pool, FakeClient(), fake_embedder()) is False
 
 
 async def test_success_saves_memories(client):
     await post_turn(client)
 
-    did_work = await process_one(app.state.pool, FakeClient())
+    did_work = await process_one(app.state.pool, FakeClient(), fake_embedder())
 
     async with app.state.pool.acquire() as conn:
         job = await get_job(conn)
@@ -79,7 +99,7 @@ async def test_retryable_error_schedules_retry(client):
         "slow down", response=httpx.Response(429, request=req), body=None
     )
 
-    await process_one(app.state.pool, FakeClient(error=error))
+    await process_one(app.state.pool, FakeClient(error=error), fake_embedder())
 
     async with app.state.pool.acquire() as conn:
         job = await get_job(conn)
@@ -95,7 +115,7 @@ async def test_non_retryable_error_goes_dead(client):
         "bad request", response=httpx.Response(400, request=req), body=None
     )
 
-    await process_one(app.state.pool, FakeClient(error=error))
+    await process_one(app.state.pool, FakeClient(error=error), fake_embedder())
 
     async with app.state.pool.acquire() as conn:
         job = await get_job(conn)
@@ -108,7 +128,9 @@ async def test_non_retryable_error_goes_dead(client):
 async def test_unexpected_crash_goes_dead(client):
     await post_turn(client)
 
-    await process_one(app.state.pool, FakeClient(error=RuntimeError("oops")))
+    await process_one(
+        app.state.pool, FakeClient(error=RuntimeError("oops")), fake_embedder()
+    )
 
     async with app.state.pool.acquire() as conn:
         job = await get_job(conn)
@@ -124,7 +146,8 @@ async def test_two_workers_drain_queue(client):
     fake = FakeClient()
     stop = asyncio.Event()
     workers = [
-        asyncio.create_task(run_worker(app.state.pool, fake, stop)) for _ in range(2)
+        asyncio.create_task(run_worker(app.state.pool, fake, fake_embedder(), stop))
+        for _ in range(2)
     ]
 
     async with app.state.pool.acquire() as conn:
@@ -153,18 +176,20 @@ async def test_worker_survives_failed_iteration(client, monkeypatch):
     real_process_one = worker.process_one
     calls = 0
 
-    async def flaky_process_one(pool, fake):
+    async def flaky_process_one(pool, fake, embed_client):
         nonlocal calls
         calls += 1
         if calls == 1:
             raise ConnectionError("postgres restarted")
-        return await real_process_one(pool, fake)
+        return await real_process_one(pool, fake, embed_client)
 
     monkeypatch.setattr(worker, "process_one", flaky_process_one)
     monkeypatch.setattr(worker, "POLL_SECONDS", 0.01)
 
     stop = asyncio.Event()
-    task = asyncio.create_task(run_worker(app.state.pool, FakeClient(), stop))
+    task = asyncio.create_task(
+        run_worker(app.state.pool, FakeClient(), fake_embedder(), stop)
+    )
 
     async with app.state.pool.acquire() as conn:
         for _ in range(100):
@@ -184,7 +209,7 @@ async def test_done_job_logs_one_line(client, caplog):
     caplog.set_level(logging.INFO, logger="smriti.worker")
     await post_turn(client)
 
-    await process_one(app.state.pool, FakeClient())
+    await process_one(app.state.pool, FakeClient(), fake_embedder())
 
     lines = [r.getMessage() for r in caplog.records if "outcome=done" in r.getMessage()]
     assert len(lines) == 1
@@ -201,7 +226,7 @@ async def test_failed_job_logs_retryable(client, caplog):
         "slow down", response=httpx.Response(429, request=req), body=None
     )
 
-    await process_one(app.state.pool, FakeClient(error=error))
+    await process_one(app.state.pool, FakeClient(error=error), fake_embedder())
 
     assert "outcome=failed" in caplog.text
     assert "retryable=True" in caplog.text
@@ -212,7 +237,7 @@ async def test_logs_never_contain_turn_text(client, caplog):
     caplog.set_level(logging.INFO, logger="smriti.worker")
     await post_turn(client)
 
-    await process_one(app.state.pool, FakeClient())
+    await process_one(app.state.pool, FakeClient(), fake_embedder())
 
     assert caplog.records  # something was logged
     assert "main Pune mein rehti hoon" not in caplog.text
@@ -223,7 +248,9 @@ async def test_crash_message_stays_out_of_logs(client, caplog):
     await post_turn(client)
 
     secret = "main Pune mein rehti hoon"
-    await process_one(app.state.pool, FakeClient(error=RuntimeError(secret)))
+    await process_one(
+        app.state.pool, FakeClient(error=RuntimeError(secret)), fake_embedder()
+    )
 
     async with app.state.pool.acquire() as conn:
         job = await get_job(conn)
@@ -232,3 +259,61 @@ async def test_crash_message_stays_out_of_logs(client, caplog):
     assert secret in job["last_error"]  # detail kept in the DB
     assert "error=RuntimeError" in caplog.text  # class name in the log
     assert secret not in caplog.text  # but never the user text
+
+
+async def test_success_saves_vector_and_model(client):
+    await post_turn(client)
+    calls = []
+
+    await process_one(app.state.pool, FakeClient(), fake_embedder(calls=calls))
+
+    async with app.state.pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "SELECT vector_dims(embedding) AS dims, embedding_model FROM memories"
+        )
+
+    assert calls == [
+        {
+            "input": ["main Pune mein rehti hoon"],
+            "model": EMBED_MODEL,
+            "input_type": "document",
+        }
+    ]
+    assert row["dims"] == EMBED_DIMS
+    assert row["embedding_model"] == EMBED_MODEL
+
+
+async def test_embed_rate_limit_retries_and_saves_nothing(client):
+    await post_turn(client)
+
+    await process_one(app.state.pool, FakeClient(), fake_embedder(status=429))
+
+    async with app.state.pool.acquire() as conn:
+        job = await get_job(conn)
+        count = await conn.fetchval("SELECT count(*) FROM memories")
+
+    assert job["status"] == "pending"
+    assert job["last_error"] == "embed: http 429"
+    assert count == 0
+
+
+async def test_embed_bad_key_goes_dead(client):
+    await post_turn(client)
+
+    await process_one(app.state.pool, FakeClient(), fake_embedder(status=401))
+
+    async with app.state.pool.acquire() as conn:
+        job = await get_job(conn)
+
+    assert job["status"] == "dead"
+    assert job["last_error"] == "embed: http 401"
+
+
+async def test_embed_failure_logs_stage_and_claude_tokens(client, caplog):
+    caplog.set_level(logging.INFO, logger="smriti.worker")
+    await post_turn(client)
+
+    await process_one(app.state.pool, FakeClient(), fake_embedder(status=503))
+
+    assert "outcome=failed stage=embed" in caplog.text
+    assert "in_tokens=120" in caplog.text

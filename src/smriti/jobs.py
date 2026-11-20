@@ -45,8 +45,9 @@ DELETE FROM memories WHERE turn_id = $1
 """
 
 INSERT_MEMORY = """
-INSERT INTO memories (user_id, turn_id, kind, content, importance)
-SELECT user_id, id, $2, $3, $4 FROM turns WHERE id = $1
+INSERT INTO memories (user_id, turn_id, kind, content, importance,
+                      embedding, embedding_model)
+SELECT user_id, id, $2, $3, $4, $5::vector, $6 FROM turns WHERE id = $1
 """
 
 RETRY_JOB = """
@@ -65,6 +66,12 @@ SET status = 'dead',
     last_error = $3
 WHERE id = $1 AND attempts = $2 AND status = 'running'
 """
+
+
+def to_pgvector(v: list[float] | None) -> str | None:
+    if v is None:
+        return None
+    return "[" + ",".join(map(str, v)) + "]"
 
 
 def backoff_delay(attempts: int, jitter: float) -> float:
@@ -97,7 +104,17 @@ async def complete_job(
         await conn.execute(DELETE_TURN_MEMORIES, turn_id)
         await conn.executemany(
             INSERT_MEMORY,
-            [(turn_id, m["kind"], m["content"], m["importance"]) for m in memories],
+            [
+                (
+                    turn_id,
+                    m["kind"],
+                    m["content"],
+                    m["importance"],
+                    to_pgvector(m.get("embedding")),
+                    m.get("embedding_model"),
+                )
+                for m in memories
+            ],
         )
         return True
 
