@@ -64,6 +64,43 @@ ORDER BY embedding <=> $2::vector
 LIMIT $4
 """
 
+GET_MEMORY = """
+SELECT id, kind, content, importance, created_at, superseded_by
+FROM memories
+WHERE id = $1 AND user_id = $2
+"""
+
+IS_FORGOTTEN = """
+SELECT EXISTS (
+    SELECT 1 FROM forgotten_memories WHERE memory_id = $1 AND user_id = $2
+)
+"""
+
+FORGET_MEMORY = """
+WITH RECURSIVE chain AS (
+    SELECT id FROM memories WHERE id = $1 AND user_id = $2
+    UNION
+    SELECT m.id FROM memories m JOIN chain c ON m.superseded_by = c.id
+),
+gone AS (
+    DELETE FROM memories WHERE id IN (SELECT id FROM chain)
+    RETURNING id, user_id
+)
+INSERT INTO forgotten_memories (memory_id, user_id)
+SELECT id, user_id FROM gone
+RETURNING memory_id
+"""
+
+TOMBSTONE_USER_MEMORIES = """
+INSERT INTO forgotten_memories (memory_id, user_id)
+SELECT id, user_id FROM memories WHERE user_id = $1
+ON CONFLICT DO NOTHING
+"""
+
+DELETE_USER_TURNS = """
+DELETE FROM turns WHERE user_id = $1
+"""
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -297,3 +334,61 @@ async def search_memories(
             SEARCH_MEMORIES, user_id, to_pgvector(query_vector), EMBED_MODEL, k
         )
     return {"items": [dict(row) for row in rows]}
+
+
+class MemoryOut(BaseModel):
+    id: int
+    kind: str
+    content: str
+    importance: int
+    created_at: AwareDatetime
+    superseded_by: int | None
+
+
+def memory_gone() -> HTTPException:
+    return HTTPException(status_code=410, detail="memory was forgotten")
+
+
+def memory_not_found() -> HTTPException:
+    return HTTPException(status_code=404, detail="memory not found")
+
+
+@app.get("/v1/users/{user_id}/memories/{memory_id}", response_model=MemoryOut)
+async def get_memory(
+    request: Request,
+    memory_id: int,
+    user_id: str = Path(min_length=1, max_length=128),
+):
+    async with db_conn(request) as conn:
+        row = await conn.fetchrow(GET_MEMORY, memory_id, user_id)
+        if row is not None:
+            return dict(row)
+        if await conn.fetchval(IS_FORGOTTEN, memory_id, user_id):
+            raise memory_gone()
+    raise memory_not_found()
+
+
+@app.delete("/v1/users/{user_id}/memories/{memory_id}", status_code=204)
+async def forget_memory(
+    request: Request,
+    memory_id: int,
+    user_id: str = Path(min_length=1, max_length=128),
+):
+    async with db_conn(request) as conn, conn.transaction():
+        forgotten = await conn.fetch(FORGET_MEMORY, memory_id, user_id)
+        if forgotten:
+            return Response(status_code=204)
+        if await conn.fetchval(IS_FORGOTTEN, memory_id, user_id):
+            raise memory_gone()
+    raise memory_not_found()
+
+
+@app.delete("/v1/users/{user_id}", status_code=204)
+async def forget_user(
+    request: Request,
+    user_id: str = Path(min_length=1, max_length=128),
+):
+    async with db_conn(request) as conn, conn.transaction():
+        await conn.execute(TOMBSTONE_USER_MEMORIES, user_id)
+        await conn.execute(DELETE_USER_TURNS, user_id)
+    return Response(status_code=204)

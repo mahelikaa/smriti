@@ -14,7 +14,8 @@ async def client():
     async with LifespanManager(app):
         async with app.state.pool.acquire() as conn:
             await conn.execute(
-                "TRUNCATE turns, extraction_jobs, memories RESTART IDENTITY"
+                "TRUNCATE turns, extraction_jobs, memories, forgotten_memories "
+                "RESTART IDENTITY"
             )
 
         transport = ASGITransport(app=app)
