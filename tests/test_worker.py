@@ -382,3 +382,13 @@ async def test_ignores_supersede_ids_it_was_not_shown(client):
     prompt = fake.messages.calls[0]["messages"][0]["content"]
     assert "Lives in Delhi" not in prompt
     assert hidden["superseded_by"] is None
+
+
+async def test_worker_sends_sent_at_to_claude(client):
+    await post_turn(client)
+    fake = FakeClient()
+
+    await process_one(app.state.pool, fake, fake_embedder())
+
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+    assert prompt.startswith("MESSAGE SENT AT: 2026-11-14 (Saturday) 15:30 IST")

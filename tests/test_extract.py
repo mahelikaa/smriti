@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from types import SimpleNamespace
 
 import anthropic
@@ -167,3 +168,36 @@ async def test_supersedes_passes_through():
     result = await extract_memories(client, "ab Bangalore mein hoon")
 
     assert result.memories[0]["supersedes"] == [7]
+
+
+@pytest.mark.parametrize(
+    "sent_at, expected",
+    [
+        (datetime(2026, 11, 21, 18, 0, tzinfo=UTC), "2026-11-21 (Saturday) 23:30 IST"),
+        (datetime(2026, 11, 21, 19, 0, tzinfo=UTC), "2026-11-22 (Sunday) 00:30 IST"),
+    ],
+)
+async def test_sends_sent_at_in_ist(sent_at, expected):
+    client = FakeClient(result=fake_response(memories=[]))
+
+    await extract_memories(client, "kal doctor ke paas jaana hai", sent_at=sent_at)
+
+    content = client.messages.calls[0]["messages"][0]["content"]
+    assert content == (
+        f"MESSAGE SENT AT: {expected}\n\nNEW MESSAGE:\nkal doctor ke paas jaana hai"
+    )
+
+
+async def test_sent_at_comes_before_known_memories():
+    client = FakeClient(result=fake_response(memories=[]))
+    known = [{"id": 7, "content": "Lives in Gurgaon"}]
+    sent_at = datetime(2026, 11, 21, 6, 30, tzinfo=UTC)
+
+    await extract_memories(client, "hi", known, sent_at)
+
+    content = client.messages.calls[0]["messages"][0]["content"]
+    assert content == (
+        "MESSAGE SENT AT: 2026-11-21 (Saturday) 12:00 IST\n\n"
+        "KNOWN MEMORIES:\n[7] Lives in Gurgaon\n\n"
+        "NEW MESSAGE:\nhi"
+    )

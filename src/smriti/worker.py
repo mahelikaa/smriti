@@ -18,7 +18,7 @@ POLL_SECONDS = 1.0
 KNOWN_LIMIT = 10
 
 GET_TURN = """
-SELECT user_id, text FROM turns WHERE id = $1
+SELECT user_id, text, sent_at FROM turns WHERE id = $1
 """
 
 
@@ -52,7 +52,7 @@ async def process_one(pool, client, embed_client) -> bool:
 
         stage = "extract"
         start = time.perf_counter()
-        result = await extract_memories(client, turn["text"], known)
+        result = await extract_memories(client, turn["text"], known, turn["sent_at"])
         claude_ms = ms_since(start)
         in_tokens, out_tokens = result.input_tokens, result.output_tokens
 
