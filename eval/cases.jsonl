@@ -1,0 +1,41 @@
+{"id": "fact-01", "category": "facts", "text": "main Pune mein rehti hoon, Kothrud side", "expect": ["Lives in Kothrud, Pune"]}
+{"id": "fact-02", "category": "facts", "text": "meri behen Riya ki shaadi December mein hai", "expect": ["Has a sister named Riya", "Sister Riya's wedding is in December"]}
+{"id": "fact-03", "category": "facts", "text": "I'm vegetarian, eggs bhi nahi khaati", "expect": ["Is vegetarian and does not eat eggs"]}
+{"id": "fact-04", "category": "facts", "text": "mera bhai Arjun Bangalore mein Flipkart mein kaam karta hai", "expect": ["Has a brother named Arjun", "Brother Arjun works at Flipkart in Bangalore"]}
+{"id": "fact-05", "category": "facts", "text": "gym jaana start kiya hai, roz subah 6 baje", "expect": ["Goes to the gym every morning at 6"]}
+{"id": "fact-06", "category": "facts", "text": "coffee se mujhe acidity hoti hai isliye chai peeti hoon", "expect": ["Gets acidity from coffee", "Drinks tea instead of coffee"]}
+{"id": "fact-07", "category": "facts", "text": "mere paas ek beagle hai, naam Bruno", "expect": ["Has a beagle named Bruno"]}
+{"id": "fact-08", "category": "facts", "text": "Delhi University se BCom kar rahi hoon, final year hai", "expect": ["Is in the final year of a BCom at Delhi University"]}
+{"id": "fact-09", "category": "facts", "text": "Mummy ko diabetes hai, unka khana alag banta hai", "expect": ["Mother has diabetes"]}
+{"id": "fact-10", "category": "facts", "text": "Arijit Singh ke gaane sunke hi neend aati hai mujhe", "expect": ["Falls asleep listening to Arijit Singh songs"]}
+{"id": "fact-11", "category": "facts", "text": "mujhe flying se hamesha dar lagta hai", "expect": ["Is afraid of flying"]}
+{"id": "date-01", "category": "dates", "sent_at": "2026-11-18T15:30:00+00:00", "text": "kal se naya job start ho raha hai Gurgaon mein", "expect": ["Starts a new job in Gurgaon on 19 Nov 2026"]}
+{"id": "date-02", "category": "dates", "sent_at": "2026-11-18T04:30:00+00:00", "text": "parso Riya ki mehendi hai", "expect": ["Riya's mehendi is on 20 Nov 2026"]}
+{"id": "date-03", "category": "dates", "sent_at": "2026-11-21T04:30:00+00:00", "text": "kal Riya ki mehendi thi, bahut maza aaya", "expect": ["Attended Riya's mehendi on 20 Nov 2026"]}
+{"id": "date-04", "category": "dates", "sent_at": "2026-11-21T19:00:00+00:00", "text": "kal doctor ka appointment hai", "expect": ["Has a doctor's appointment on 23 Nov 2026"]}
+{"id": "date-05", "category": "dates", "sent_at": "2026-11-21T04:30:00+00:00", "text": "Monday se semester exams shuru hain", "expect": ["Semester exams start on 23 Nov 2026"]}
+{"id": "date-06", "category": "dates", "sent_at": "2026-11-21T04:30:00+00:00", "text": "aaj hi driving test pass kiya!!", "expect": ["Passed their driving test on 21 Nov 2026"]}
+{"id": "date-07", "category": "dates", "sent_at": "2026-11-18T04:30:00+00:00", "text": "agle hafte Goa ja rahi hoon dosto ke saath", "expect": ["Is going to Goa with friends in the week of 23 Nov 2026"]}
+{"id": "date-08", "category": "dates", "sent_at": "2026-11-21T17:00:00+00:00", "text": "kal subah 7 baje Mumbai ki flight hai", "expect": ["Has a flight to Mumbai at 7 am on 22 Nov 2026"]}
+{"id": "mood-01", "category": "moods", "text": "aaj bahut thak gayi hoon yaar", "expect": []}
+{"id": "mood-02", "category": "moods", "text": "uff bore ho rahi hoon", "expect": []}
+{"id": "mood-03", "category": "moods", "text": "bhook lagi hai, kuch order karti hoon", "expect": []}
+{"id": "mood-04", "category": "moods", "text": "hi! kya haal hai?", "expect": []}
+{"id": "mood-05", "category": "moods", "text": "pata nahi kyun aaj mood off hai", "expect": []}
+{"id": "mood-06", "category": "moods", "text": "haha ok", "expect": []}
+{"id": "mood-07", "category": "moods", "text": "good night, kal baat karte hain", "expect": []}
+{"id": "mood-08", "category": "moods", "text": "tum kaise ho?", "expect": []}
+{"id": "supersede-01", "category": "supersede", "known": [{"id": 11, "content": "Lives in Gurgaon"}], "text": "finally Bangalore shift ho gayi, Koramangala mein flat liya", "expect": ["Lives in Koramangala, Bangalore"], "supersedes": [11]}
+{"id": "supersede-02", "category": "supersede", "known": [{"id": 21, "content": "Works at TCS as a software engineer"}], "text": "TCS chhod diya, ab Razorpay join kiya hai", "expect": ["Works at Razorpay"], "supersedes": [21]}
+{"id": "supersede-03", "category": "supersede", "known": [{"id": 31, "content": "Is dating Kabir"}], "text": "Kabir aur mera breakup ho gaya", "expect": ["Broke up with Kabir"], "supersedes": [31]}
+{"id": "supersede-04", "category": "supersede", "sent_at": "2026-11-21T04:30:00+00:00", "known": [{"id": 41, "content": "Sister Riya's wedding is in December 2026"}], "text": "Riya ki shaadi postpone ho gayi, ab March mein hai", "expect": ["Sister Riya's wedding is now in March 2027"], "supersedes": [41]}
+{"id": "supersede-05", "category": "supersede", "known": [{"id": 51, "content": "Is vegetarian"}], "text": "office mein aaj bahut kaam tha", "expect": [], "supersedes": []}
+{"id": "supersede-06", "category": "supersede", "known": [{"id": 61, "content": "Favourite food is rajma chawal"}], "text": "aajkal mujhe biryani sabse zyada pasand hai", "expect": ["Favourite food is now biryani"], "supersedes": [61]}
+{"id": "context-01", "category": "context", "known": [{"id": 71, "content": "Was asked to lead the Diwali event at office"}], "text": "haan theek hai, main kar lungi", "expect": ["Agreed to lead the Diwali event at office"]}
+{"id": "context-02", "category": "context", "text": "haan theek hai, main kar lungi", "expect": []}
+{"id": "context-03", "category": "context", "known": [{"id": 81, "content": "Was waiting for biopsy results"}], "text": "i'm fine, results normal aaye", "expect": ["Biopsy results came back normal"]}
+{"id": "context-04", "category": "context", "text": "i'm fine, tum batao", "expect": []}
+{"id": "context-05", "category": "context", "known": [{"id": 91, "content": "Goes to Gold's Gym in Indiranagar"}], "text": "ab wahan nahi jaati, bahut crowded ho gaya", "expect": ["Stopped going to Gold's Gym because it got too crowded"], "supersedes": [91]}
+{"id": "context-06", "category": "context", "text": "ab wahan nahi jaati, bahut crowded ho gaya", "expect": []}
+{"id": "multi-01", "category": "multi", "text": "main Ananya, 24 saal ki, Jaipur se hoon but abhi Noida mein rehti hoon", "expect": ["Name is Ananya", "Is 24 years old", "Is from Jaipur", "Lives in Noida"]}
+{"id": "multi-02", "category": "multi", "sent_at": "2026-11-21T04:30:00+00:00", "text": "papa retire ho gaye pichle mahine, ab gardening karte hain", "expect": ["Father retired in October 2026", "Father now spends time gardening"]}
