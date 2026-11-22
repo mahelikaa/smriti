@@ -39,3 +39,23 @@
 {"id": "context-06", "category": "context", "text": "ab wahan nahi jaati, bahut crowded ho gaya", "expect": []}
 {"id": "multi-01", "category": "multi", "text": "main Ananya, 24 saal ki, Jaipur se hoon but abhi Noida mein rehti hoon", "expect": ["Name is Ananya", "Is 24 years old", "Is from Jaipur", "Lives in Noida"]}
 {"id": "multi-02", "category": "multi", "sent_at": "2026-11-21T04:30:00+00:00", "text": "papa retire ho gaye pichle mahine, ab gardening karte hain", "expect": ["Father retired in October 2026", "Father now spends time gardening"]}
+{"id": "hdate-01", "category": "dates-hard", "sent_at": "2026-11-22T04:30:00+00:00", "text": "Monday ko Swiggy mein interview hai", "expect": ["Has an interview at Swiggy on 23 Nov 2026"]}
+{"id": "hdate-02", "category": "dates-hard", "sent_at": "2026-11-22T18:50:00+00:00", "text": "parso Chennai ki flight hai", "expect": ["Has a flight to Chennai on 25 Nov 2026"]}
+{"id": "hdate-03", "category": "dates-hard", "sent_at": "2026-11-30T05:00:00+00:00", "text": "agle mahine ki 5 tareekh ko CA final ka result aayega", "expect": ["CA final result is due on 5 Dec 2026"]}
+{"id": "hdate-04", "category": "dates-hard", "sent_at": "2026-12-28T05:00:00+00:00", "text": "naye saal pe Manali ja rahe hain", "expect": ["Is going to Manali for New Year (around 1 Jan 2027)"]}
+{"id": "hdate-05", "category": "dates-hard", "sent_at": "2026-11-22T04:30:00+00:00", "text": "kl raat Ananya ki bday party mein gayi thi", "expect": ["Went to Ananya's birthday party on 21 Nov 2026"]}
+{"id": "hdate-06", "category": "dates-hard", "sent_at": "2026-11-22T04:30:00+00:00", "text": "2 din pehle naya phone liya, iPhone 17", "expect": ["Bought an iPhone 17 on 20 Nov 2026"]}
+{"id": "neg-01", "category": "negation", "text": "haan bilkul, main toh roz gym jaati hoon 🙄 3 mahine se gayi hi nahi", "expect": ["Has not been to the gym in 3 months"]}
+{"id": "neg-02", "category": "negation", "text": "non-veg nahi khaati, bas kabhi kabhi fish", "expect": ["Does not eat meat except fish occasionally"]}
+{"id": "neg-03", "category": "negation", "text": "maine life mein kabhi smoke nahi kiya", "expect": ["Has never smoked"]}
+{"id": "neg-04", "category": "negation", "text": "Delhi mein paida hui but wahan kabhi rahi nahi", "expect": ["Was born in Delhi", "Has never lived in Delhi"]}
+{"id": "other-01", "category": "others", "known": [{"id": 101, "content": "Lives in Mumbai"}, {"id": 102, "content": "Has a roommate named Sneha"}], "text": "Sneha Pune shift ho gayi, ab flat mein akeli hoon", "expect": ["Roommate Sneha moved to Pune", "Now lives alone in the flat"], "supersedes": [102]}
+{"id": "other-02", "category": "others", "known": [{"id": 111, "content": "Brother Arjun works at Flipkart in Bangalore"}], "text": "Arjun ka promotion ho gaya, ab team lead hai", "expect": ["Brother Arjun is now a team lead at Flipkart"], "supersedes": []}
+{"id": "other-03", "category": "others", "text": "Mummy Papa ki 30th anniversary 12 December ko hai", "expect": ["Parents' 30th wedding anniversary is on 12 Dec 2026"]}
+{"id": "hypo-01", "category": "hypothetical", "known": [{"id": 121, "content": "Lives in Gurgaon"}], "text": "agar Razorpay ka offer aaya toh Bangalore shift ho jaungi", "expect": ["Would move to Bangalore if they get a Razorpay offer"], "supersedes": []}
+{"id": "hypo-02", "category": "hypothetical", "text": "soch rahi hoon MBA karu ya job continue karu", "expect": ["Is deciding between doing an MBA and staying in their job"]}
+{"id": "hypo-03", "category": "hypothetical", "text": "kaash mere paas ek dog hota", "expect": ["Wants a dog"]}
+{"id": "hsup-01", "category": "supersede-hard", "known": [{"id": 131, "content": "Lives in Gurgaon"}, {"id": 132, "content": "Works at TCS"}], "text": "Bangalore aa gayi finally, Razorpay mein join kar liya", "expect": ["Lives in Bangalore", "Works at Razorpay"], "supersedes": [131, 132]}
+{"id": "hsup-02", "category": "supersede-hard", "sent_at": "2026-11-22T04:30:00+00:00", "known": [{"id": 141, "content": "Has a sister named Riya"}, {"id": 142, "content": "Sister Riya's wedding is in March 2027"}], "text": "Riya ki shaadi kal ho gayi, court marriage kar li 😭", "expect": ["Sister Riya got married on 21 Nov 2026 (court marriage)"], "supersedes": [142]}
+{"id": "hsup-03", "category": "supersede-hard", "sent_at": "2026-11-22T04:30:00+00:00", "known": [{"id": 151, "content": "Works at Razorpay"}], "text": "aaj Razorpay mein last day tha, notice period khatam", "expect": ["Left Razorpay on 22 Nov 2026"], "supersedes": [151]}
+{"id": "hctx-01", "category": "context-hard", "known": [{"id": 161, "content": "Was asked whether they prefer the mountains or the beach"}], "text": "pahaad, hamesha", "expect": ["Prefers the mountains over the beach"]}
