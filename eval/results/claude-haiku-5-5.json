@@ -1,7 +1,7 @@
 {
   "model": "claude-haiku-5-5",
   "judge_model": "claude-opus-5-5",
-  "ran_at": "2026-11-22T21:44:37+00:00",
+  "ran_at": "2026-11-22T21:52:15+00:00",
   "mean": {
     "context": {
       "recall": 1.0,
@@ -34,7 +34,7 @@
       "supersede": null
     },
     "hypothetical": {
-      "recall": 0.222,
+      "recall": 1.0,
       "precision": 1.0,
       "skip": null,
       "supersede": 1.0
@@ -52,16 +52,16 @@
       "supersede": null
     },
     "negation": {
-      "recall": 0.867,
+      "recall": 1.0,
       "precision": 1.0,
       "skip": null,
       "supersede": null
     },
     "others": {
-      "recall": 0.917,
-      "precision": 0.889,
+      "recall": 1.0,
+      "precision": 1.0,
       "skip": null,
-      "supersede": 0.667
+      "supersede": 1.0
     },
     "supersede": {
       "recall": 1.0,
@@ -76,205 +76,45 @@
       "supersede": 1.0
     },
     "TOTAL": {
-      "recall": 0.943,
-      "precision": 0.993,
+      "recall": 1.0,
+      "precision": 1.0,
       "skip": 1.0,
-      "supersede": 0.949
+      "supersede": 1.0
     }
   },
   "runs": [
     {
       "summary": {
         "cases": 61,
-        "recall": 0.932,
-        "precision": 0.98,
+        "recall": 1.0,
+        "precision": 1.0,
         "skip": 1.0,
         "supersede": 1.0
       },
-      "extract_cost": 0.01036,
-      "misses": [
-        {
-          "id": "other-02",
-          "category": "others",
-          "expected": 1,
-          "found": 0,
-          "saved": 1,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": true,
-          "memories": [
-            {
-              "kind": "event",
-              "content": "Brother Arjun was promoted to team lead",
-              "importance": 3,
-              "supersedes": []
-            }
-          ]
-        },
-        {
-          "id": "hypo-01",
-          "category": "hypothetical",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": true,
-          "memories": []
-        },
-        {
-          "id": "hypo-02",
-          "category": "hypothetical",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": null,
-          "memories": []
-        },
-        {
-          "id": "hypo-03",
-          "category": "hypothetical",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": null,
-          "memories": []
-        }
-      ]
+      "extract_cost": 0.01108,
+      "misses": []
     },
     {
       "summary": {
         "cases": 61,
-        "recall": 0.949,
+        "recall": 1.0,
         "precision": 1.0,
         "skip": 1.0,
-        "supersede": 0.923
+        "supersede": 1.0
       },
-      "extract_cost": 0.01067,
-      "misses": [
-        {
-          "id": "neg-01",
-          "category": "negation",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": null,
-          "memories": []
-        },
-        {
-          "id": "other-02",
-          "category": "others",
-          "expected": 1,
-          "found": 1,
-          "saved": 1,
-          "correct": 1,
-          "skip_ok": null,
-          "supersede_ok": false,
-          "memories": [
-            {
-              "kind": "event",
-              "content": "Brother Arjun was promoted and is now a team lead",
-              "importance": 3,
-              "supersedes": [
-                111
-              ]
-            }
-          ]
-        },
-        {
-          "id": "hypo-02",
-          "category": "hypothetical",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": null,
-          "memories": []
-        },
-        {
-          "id": "hypo-03",
-          "category": "hypothetical",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": null,
-          "memories": []
-        }
-      ]
+      "extract_cost": 0.01095,
+      "misses": []
     },
     {
       "summary": {
         "cases": 61,
-        "recall": 0.949,
+        "recall": 1.0,
         "precision": 1.0,
         "skip": 1.0,
-        "supersede": 0.923
+        "supersede": 1.0
       },
-      "extract_cost": 0.01056,
-      "misses": [
-        {
-          "id": "neg-01",
-          "category": "negation",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": null,
-          "memories": []
-        },
-        {
-          "id": "other-02",
-          "category": "others",
-          "expected": 1,
-          "found": 1,
-          "saved": 1,
-          "correct": 1,
-          "skip_ok": null,
-          "supersede_ok": false,
-          "memories": [
-            {
-              "kind": "event",
-              "content": "Brother Arjun was promoted and is now a team lead at Flipkart",
-              "importance": 3,
-              "supersedes": [
-                111
-              ]
-            }
-          ]
-        },
-        {
-          "id": "hypo-02",
-          "category": "hypothetical",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": null,
-          "memories": []
-        },
-        {
-          "id": "hypo-03",
-          "category": "hypothetical",
-          "expected": 1,
-          "found": 0,
-          "saved": 0,
-          "correct": 0,
-          "skip_ok": null,
-          "supersede_ok": null,
-          "memories": []
-        }
-      ]
+      "extract_cost": 0.01122,
+      "misses": []
     }
   ]
 }

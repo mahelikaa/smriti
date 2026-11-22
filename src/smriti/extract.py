@@ -41,6 +41,12 @@ tomorrow) into dates, e.g. "starts a new job on 19 Nov 2026". Never write
 tomorrow: decide from the verb tense.
 Do not save passing moods or states (nervous today, tired, bored, hungry).
 Only save a feeling if it lasts, e.g. "is afraid of flying".
+Wishes, goals and choices they are weighing are worth saving, worded as
+what they are: "wants to learn the guitar", "is thinking about moving
+abroad". Never write them as if they already happened. A change that
+depends on a condition ("if I get the visa I will move") has not happened,
+so it supersedes nothing.
+If the user is sarcastic, save what they mean, not the literal words.
 """
 
 RETRYABLE_ERRORS = (
