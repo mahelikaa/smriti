@@ -1,0 +1,111 @@
+{
+  "model": "claude-haiku-5-5",
+  "judge_model": "claude-opus-5-5",
+  "ran_at": "2026-11-22T22:16:27+00:00",
+  "mean": {
+    "heldout": {
+      "recall": 1.0,
+      "precision": 0.929,
+      "skip": 0.667,
+      "supersede": 1.0
+    },
+    "TOTAL": {
+      "recall": 1.0,
+      "precision": 0.929,
+      "skip": 0.667,
+      "supersede": 1.0
+    }
+  },
+  "runs": [
+    {
+      "summary": {
+        "cases": 15,
+        "recall": 1.0,
+        "precision": 0.929,
+        "skip": 0.667,
+        "supersede": 1.0
+      },
+      "extract_cost": 0.00269,
+      "misses": [
+        {
+          "id": "ho-08",
+          "category": "heldout",
+          "expected": 0,
+          "found": 0,
+          "saved": 1,
+          "correct": 0,
+          "skip_ok": false,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Thinks Hyderabad biryani has no equal",
+              "importance": 1,
+              "supersedes": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "summary": {
+        "cases": 15,
+        "recall": 1.0,
+        "precision": 0.929,
+        "skip": 0.667,
+        "supersede": 1.0
+      },
+      "extract_cost": 0.00269,
+      "misses": [
+        {
+          "id": "ho-08",
+          "category": "heldout",
+          "expected": 0,
+          "found": 0,
+          "saved": 1,
+          "correct": 0,
+          "skip_ok": false,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Thinks Hyderabad biryani is unmatched",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "summary": {
+        "cases": 15,
+        "recall": 1.0,
+        "precision": 0.929,
+        "skip": 0.667,
+        "supersede": 1.0
+      },
+      "extract_cost": 0.00245,
+      "misses": [
+        {
+          "id": "ho-08",
+          "category": "heldout",
+          "expected": 0,
+          "found": 0,
+          "saved": 1,
+          "correct": 0,
+          "skip_ok": false,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Thinks Hyderabad biryani is unmatched",
+              "importance": 1,
+              "supersedes": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

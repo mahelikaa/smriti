@@ -1,0 +1,15 @@
+{"id": "ho-01", "category": "heldout", "text": "mere chachu ka Indore mein kapde ka business hai", "expect": ["Uncle runs a clothing business in Indore"]}
+{"id": "ho-02", "category": "heldout", "text": "main left-handed hoon, isliye scissors use karna mushkil hai", "expect": ["Is left-handed"]}
+{"id": "ho-03", "category": "heldout", "sent_at": "2026-11-21T04:30:00+00:00", "text": "agle Saturday Kavya ki engagement hai, Lucknow jaana padega", "expect": ["Attending Kavya's engagement in Lucknow on 28 Nov 2026"]}
+{"id": "ho-04", "category": "heldout", "sent_at": "2026-11-21T04:30:00+00:00", "text": "pichle hafte se meditation shuru kiya, 10 min daily", "expect": ["Meditates 10 minutes daily, started in mid Nov 2026"]}
+{"id": "ho-05", "category": "heldout", "text": "ugh traffic mein phasi hoon", "expect": []}
+{"id": "ho-06", "category": "heldout", "text": "lol same yaar", "expect": []}
+{"id": "ho-07", "category": "heldout", "known": [{"id": 201, "content": "Drives a Maruti Swift"}], "text": "Swift bech di, ab Nexon EV le li", "expect": ["Drives a Tata Nexon EV"], "supersedes": [201]}
+{"id": "ho-08", "category": "heldout", "known": [{"id": 211, "content": "Lives in Hyderabad"}], "text": "Hyderabad ki biryani ka koi muqabla nahi", "expect": [], "supersedes": []}
+{"id": "ho-09", "category": "heldout", "text": "kabhi na kabhi apna cafe kholna hai mujhe", "expect": ["Wants to open their own cafe someday"]}
+{"id": "ho-10", "category": "heldout", "text": "haan haan, mujhe toh Monday mornings bahut pasand hain 🙃", "expect": ["Dislikes Monday mornings"]}
+{"id": "ho-11", "category": "heldout", "text": "meri dost Ishita ko gluten allergy hai, uske liye alag order karna padta hai", "expect": ["Friend Ishita has a gluten allergy"]}
+{"id": "ho-12", "category": "heldout", "known": [{"id": 221, "content": "Was asked whether they have any siblings"}], "text": "do bhai hain, dono chhote", "expect": ["Has two younger brothers"]}
+{"id": "ho-13", "category": "heldout", "text": "agar promotion nahi mila toh March mein resign kar dungi", "known": [{"id": 231, "content": "Works at Infosys"}], "expect": ["Plans to resign in March if they do not get a promotion"], "supersedes": []}
+{"id": "ho-14", "category": "heldout", "text": "main Tamil hoon but Mumbai mein badi hui, Marathi bhi aati hai", "expect": ["Is Tamil", "Grew up in Mumbai", "Speaks Marathi"]}
+{"id": "ho-15", "category": "heldout", "sent_at": "2026-11-21T04:30:00+00:00", "text": "parson raat ko hi Pune se wapas aayi", "expect": ["Returned from Pune on the night of 19 Nov 2026"]}

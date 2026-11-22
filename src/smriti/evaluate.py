@@ -237,14 +237,16 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default=MODEL, choices=sorted(PRICES_PER_MTOK))
     parser.add_argument("--runs", type=int, default=1)
+    parser.add_argument("--cases", type=Path, default=CASES_PATH)
     args = parser.parse_args()
 
-    cases = load_cases()
+    cases = load_cases(args.cases)
     runs = asyncio.run(run_eval(cases, args.model, args.runs))
     mean = print_report(cases, runs, args.model)
 
     RESULTS_DIR.mkdir(exist_ok=True)
-    (RESULTS_DIR / f"{args.model}.json").write_text(
+    suffix = "" if args.cases == CASES_PATH else f"-{args.cases.stem}"
+    (RESULTS_DIR / f"{args.model}{suffix}.json").write_text(
         json.dumps(
             {
                 "model": args.model,
