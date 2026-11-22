@@ -3,6 +3,7 @@ import pytest
 from smriti.evaluate import (
     Case,
     Verdict,
+    is_miss,
     judge,
     load_cases,
     mean_of,
@@ -147,3 +148,21 @@ def test_mean_of_averages_runs_and_skips_missing_values():
         "skip": None,
         "supersede": 1.0,
     }
+
+
+def test_a_failed_skip_counts_as_a_miss():
+    score = score_case(
+        make_case([]), [memory("Is tired")], [Verdict(covers=[], duplicate_of=None)]
+    )
+
+    assert is_miss(score) is True
+
+
+def test_a_clean_case_is_not_a_miss():
+    score = score_case(
+        make_case(["Lives in Pune"]),
+        [memory("Lives in Pune")],
+        [Verdict(covers=[0], duplicate_of=None)],
+    )
+
+    assert is_miss(score) is False

@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 import anthropic
 from pydantic import BaseModel, Field, ValidationError
 
-MODEL = "claude-opus-5-5"
+MODEL = "claude-haiku-5-5"
 MAX_TOKENS = 4096
 USER_TZ = ZoneInfo("Asia/Kolkata")
 
@@ -20,12 +20,21 @@ You extract long-term memories about the USER from one chat message.
 The message may be in English, Hindi, or Hinglish (Hindi in Latin script).
 Write each memory in short English, in third person ("lives in Pune").
 Only keep things worth remembering in a future conversation:
-facts, preferences, events, relationships. Skip greetings, small talk,
+facts, preferences, events, relationships. Plans that have a date are
+worth remembering. Skip greetings, small talk,
 and anything about the assistant. If nothing is worth remembering,
 return an empty list. importance: 1 = trivia, 5 = core to who they are.
 You may also get KNOWN MEMORIES, each with an id. If a new memory makes a
 known one no longer true (they moved, changed jobs, broke up), put the old
 id in supersedes. Only use ids from the list. Do not repeat known memories.
+Only save what the user actually said. Do not guess gender, age, job,
+studies, city or relationships from grammar or context: "office mein
+meeting thi" does not say where they work, and verb forms are not a memory.
+Do not save that the user knows someone unless they say how (sister,
+friend, manager).
+Save each fact once. When something changes (moved, new job), write one
+memory with the new state, e.g. "lives in Kochi (moved from Indore in
+Mar 2026)", not one for the change and another for the new state.
 Use MESSAGE SENT AT to turn relative times (kal, parso, aaj, next week,
 tomorrow) into dates, e.g. "starts a new job on 19 Nov 2026". Never write
 "tomorrow" or "next week" in a memory. "kal" can mean yesterday or

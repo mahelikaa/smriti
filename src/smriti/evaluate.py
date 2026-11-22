@@ -177,6 +177,15 @@ def mean_of(tables: list[dict]) -> dict:
     return out
 
 
+def is_miss(s: CaseScore) -> bool:
+    return (
+        s.found < s.expected
+        or s.correct < s.saved
+        or s.skip_ok is False
+        or s.supersede_ok is False
+    )
+
+
 def cell(value: float | None) -> str:
     return "-" if value is None else f"{value:.0%}"
 
@@ -198,13 +207,7 @@ def print_report(cases: list[Case], runs: list[list[dict]], model: str) -> dict:
 
     print("\nmisses (runs missed / runs):")
     for i, case in enumerate(cases):
-        bad = [
-            run[i]
-            for run in runs
-            if run[i]["score"].found < run[i]["score"].expected
-            or run[i]["score"].correct < run[i]["score"].saved
-            or run[i]["score"].supersede_ok is False
-        ]
+        bad = [run[i] for run in runs if is_miss(run[i]["score"])]
         if bad:
             saved = [m["content"] for m in bad[-1]["memories"]] or ["(nothing)"]
             print(f"  {case.id} {len(bad)}/{len(runs)}: saved {saved}")
@@ -252,9 +255,10 @@ def main() -> None:
                     {
                         "summary": by_category([r["score"] for r in run])["TOTAL"],
                         "extract_cost": round(sum(r["extract_cost"] for r in run), 5),
-                        "cases": [
+                        "misses": [
                             {**asdict(r["score"]), "memories": r["memories"]}
                             for r in run
+                            if is_miss(r["score"])
                         ],
                     }
                     for run in runs

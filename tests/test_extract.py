@@ -130,11 +130,11 @@ async def test_api_errors_are_sorted(error, retryable):
 
 
 def test_cost_one_million_input_tokens():
-    assert cost_usd(1_000_000, 0) == 4.0
+    assert cost_usd(1_000_000, 0, "claude-opus-5-5") == 4.0
 
 
 def test_cost_mixed():
-    assert cost_usd(1000, 500) == pytest.approx(0.014)
+    assert cost_usd(1000, 500, "claude-opus-5-5") == pytest.approx(0.014)
 
 
 def test_cost_uses_the_model_price():
@@ -144,9 +144,9 @@ def test_cost_uses_the_model_price():
 async def test_sends_the_requested_model():
     client = FakeClient(result=fake_response(memories=[]))
 
-    await extract_memories(client, "hello", model="claude-haiku-5-5")
+    await extract_memories(client, "hello", model="claude-opus-5-5")
 
-    assert client.messages.calls[0]["model"] == "claude-haiku-5-5"
+    assert client.messages.calls[0]["model"] == "claude-opus-5-5"
 
 
 async def test_usage_passes_through():
