@@ -1,3 +1,5 @@
+import asyncio
+import logging
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
 
@@ -5,6 +7,46 @@ import asyncpg
 
 DEFAULT_DATABASE_URL = "postgresql://smriti:smriti@localhost:5433/smriti"
 MIGRATIONS_DIR = Path(__file__).resolve().parents[2] / "migrations"
+CONNECT_ATTEMPTS = 8
+FIRST_DELAY_S = 0.5
+MAX_DELAY_S = 4.0
+
+DB_UNAVAILABLE_ERRORS = (
+    OSError,
+    TimeoutError,
+    asyncpg.CannotConnectNowError,
+    asyncpg.InterfaceError,
+)
+
+log = logging.getLogger("smriti.db")
+
+
+class DatabaseUnavailable(RuntimeError):
+    pass
+
+
+async def create_pool_with_retry(
+    url: str, attempts: int = CONNECT_ATTEMPTS, **pool_kwargs
+) -> asyncpg.Pool:
+    delay = FIRST_DELAY_S
+    for attempt in range(1, attempts + 1):
+        try:
+            return await asyncpg.create_pool(url, **pool_kwargs)
+        except DB_UNAVAILABLE_ERRORS as e:
+            if attempt == attempts:
+                raise DatabaseUnavailable(
+                    f"database unreachable after {attempts} attempts: "
+                    f"{type(e).__name__}"
+                ) from e
+            log.warning(
+                "database not ready (attempt %d/%d, %s), retrying in %.1fs",
+                attempt,
+                attempts,
+                type(e).__name__,
+                delay,
+            )
+            await asyncio.sleep(delay)
+            delay = min(delay * 2, MAX_DELAY_S)
 
 
 def with_database(url: str, db: str) -> str:

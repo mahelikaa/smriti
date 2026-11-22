@@ -4,13 +4,12 @@ import random
 import signal
 import time
 
-import asyncpg
-
 from smriti import embed as embedding
+from smriti.db import DB_UNAVAILABLE_ERRORS, create_pool_with_retry
 from smriti.embed import EMBED_MODEL, EmbeddingError, to_pgvector
 from smriti.extract import ExtractionError, cost_usd, extract_memories, make_client
 from smriti.jobs import claim_job, complete_job, fail_job
-from smriti.main import DATABASE_URL, DB_UNAVAILABLE_ERRORS, SEARCH_MEMORIES
+from smriti.main import DATABASE_URL, SEARCH_MEMORIES
 
 log = logging.getLogger("smriti.worker")
 
@@ -149,7 +148,9 @@ async def run_worker(pool, client, embed_client, stop: asyncio.Event) -> None:
 async def main(concurrency: int = 4) -> None:
     logging.basicConfig(level=logging.INFO)
     # each worker holds at most one connection at a time, plus one spare
-    pool = await asyncpg.create_pool(DATABASE_URL, min_size=1, max_size=concurrency + 1)
+    pool = await create_pool_with_retry(
+        DATABASE_URL, min_size=1, max_size=concurrency + 1
+    )
     client = make_client()
     embed_client = embedding.make_client()
     stop = asyncio.Event()

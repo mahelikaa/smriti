@@ -9,17 +9,14 @@ from fastapi.responses import JSONResponse
 from pydantic import AwareDatetime, BaseModel, Field
 
 from smriti import embed as embedding
-from smriti.db import DEFAULT_DATABASE_URL
+from smriti.db import (
+    DB_UNAVAILABLE_ERRORS,
+    DEFAULT_DATABASE_URL,
+    create_pool_with_retry,
+)
 from smriti.embed import EMBED_MODEL, EmbeddingError, to_pgvector
 
 DATABASE_URL = os.environ.get("DATABASE_URL", DEFAULT_DATABASE_URL)
-
-DB_UNAVAILABLE_ERRORS = (
-    OSError,
-    TimeoutError,
-    asyncpg.CannotConnectNowError,
-    asyncpg.InterfaceError,
-)
 
 INSERT_TURN = """
 INSERT INTO turns (user_id, external_id, role, text, sent_at)
@@ -102,7 +99,7 @@ DELETE FROM turns WHERE user_id = $1
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.pool = await asyncpg.create_pool(
+    app.state.pool = await create_pool_with_retry(
         DATABASE_URL,
         min_size=1,
         max_size=10,

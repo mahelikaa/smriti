@@ -1,8 +1,7 @@
 import asyncio
 
-import asyncpg
-
 from smriti import embed as embedding
+from smriti.db import create_pool_with_retry
 from smriti.embed import EMBED_MODEL, to_pgvector
 from smriti.main import DATABASE_URL
 
@@ -47,7 +46,7 @@ async def backfill(pool, embed_client, batch_size: int = BATCH_SIZE) -> int:
 
 
 async def main() -> None:
-    pool = await asyncpg.create_pool(DATABASE_URL, min_size=1, max_size=2)
+    pool = await create_pool_with_retry(DATABASE_URL, min_size=1, max_size=2)
     embed_client = embedding.make_client()
     try:
         done = await backfill(pool, embed_client)
