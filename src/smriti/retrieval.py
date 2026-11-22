@@ -41,6 +41,7 @@ class SeedMemory(BaseModel):
 class Query(BaseModel):
     text: str
     relevant: list[str]
+    tag: str = "basic"
 
 
 class RetrievalSet(BaseModel):
@@ -78,6 +79,14 @@ def summarize(rankings: list[list[str]], queries: list[Query]) -> dict:
             sum(hit_at(r, q.relevant, K) for r, q in zip(rankings, queries)) / n, 3
         ),
     }
+
+
+def summarize_by_tag(rankings: list[list[str]], queries: list[Query]) -> dict:
+    out = {"all": summarize(rankings, queries)}
+    for tag in sorted({q.tag for q in queries}):
+        pairs = [(r, q) for r, q in zip(rankings, queries) if q.tag == tag]
+        out[tag] = summarize([r for r, _ in pairs], [q for _, q in pairs])
+    return out
 
 
 async def embed_with_retry(
@@ -141,12 +150,15 @@ async def run(data: RetrievalSet) -> list[list[str]]:
 def main() -> None:
     data = load_set()
     rankings = asyncio.run(run(data))
-    summary = summarize(rankings, data.queries)
+    summary = summarize_by_tag(rankings, data.queries)
     content = {m.id: m.content for m in data.memories}
 
-    print(
-        f"recall@1 {summary['recall@1']:.0%}   recall@{K} {summary[f'recall@{K}']:.0%}"
-    )
+    print(f"{len(data.memories)} memories")
+    for tag, s in summary.items():
+        print(
+            f"{tag:<6} {s['queries']:>3} queries   "
+            f"recall@1 {s['recall@1']:.0%}   recall@{K} {s[f'recall@{K}']:.0%}"
+        )
     print("\nmisses:")
     for q, r in zip(data.queries, rankings):
         if not hit_at(r, q.relevant, K):
@@ -157,10 +169,12 @@ def main() -> None:
             {
                 "model": EMBED_MODEL,
                 "ran_at": datetime.now(UTC).isoformat(timespec="seconds"),
+                "memories": len(data.memories),
                 "summary": summary,
                 "queries": [
                     {
                         "text": q.text,
+                        "tag": q.tag,
                         "relevant": q.relevant,
                         "top": [f"{k}: {content[k]}" for k in r],
                         "rank": next(

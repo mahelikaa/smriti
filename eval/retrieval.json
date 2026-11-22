@@ -1,87 +1,1069 @@
 {
   "memories": [
-    {"id": "m01", "kind": "fact", "content": "Lives in Bangalore, moved from Delhi in Oct 2026"},
-    {"id": "m02", "kind": "fact", "content": "Works as a backend engineer at a fintech startup"},
-    {"id": "m03", "kind": "relationship", "content": "Has an older sister named Riya"},
-    {"id": "m04", "kind": "event", "content": "Sister Riya's wedding is on 12 Dec 2026 in Jaipur"},
-    {"id": "m05", "kind": "relationship", "content": "Best friend Kabir lives in Mumbai"},
-    {"id": "m06", "kind": "preference", "content": "Is vegetarian"},
-    {"id": "m07", "kind": "fact", "content": "Is allergic to peanuts"},
-    {"id": "m08", "kind": "preference", "content": "Prefers tea over coffee because coffee gives acidity"},
-    {"id": "m09", "kind": "fact", "content": "Has a pet beagle named Bruno"},
-    {"id": "m10", "kind": "event", "content": "Bruno has a vet appointment on 25 Nov 2026"},
-    {"id": "m11", "kind": "fact", "content": "Goes to Gold's Gym in Koramangala"},
-    {"id": "m12", "kind": "preference", "content": "Is training for a half marathon in Jan 2027"},
-    {"id": "m13", "kind": "fact", "content": "Mother is a school teacher in Lucknow"},
-    {"id": "m14", "kind": "fact", "content": "Father had knee surgery in Sep 2026"},
-    {"id": "m15", "kind": "preference", "content": "Loves old Hindi songs, especially Kishore Kumar"},
-    {"id": "m16", "kind": "preference", "content": "Dislikes horror movies"},
-    {"id": "m17", "kind": "fact", "content": "Is learning the Rust programming language"},
-    {"id": "m18", "kind": "event", "content": "Has a job interview at Razorpay on 28 Nov 2026"},
-    {"id": "m19", "kind": "fact", "content": "Is saving money to buy a car next year"},
-    {"id": "m20", "kind": "fact", "content": "Commutes to work by metro"},
-    {"id": "m21", "kind": "preference", "content": "Wants to visit Japan"},
-    {"id": "m22", "kind": "fact", "content": "Speaks Hindi, English and a little Kannada"},
-    {"id": "m23", "kind": "fact", "content": "Has trouble sleeping and usually falls asleep after 2 am"},
-    {"id": "m24", "kind": "event", "content": "Spent Diwali 2026 with parents in Lucknow"},
-    {"id": "m25", "kind": "relationship", "content": "Partner Aditya is a doctor"},
-    {"id": "m26", "kind": "event", "content": "Aditya's birthday is on 3 Dec"},
-    {"id": "m27", "kind": "fact", "content": "Shares a flat in HSR Layout with flatmate Neha"},
-    {"id": "m28", "kind": "preference", "content": "Does not drink alcohol"},
-    {"id": "m29", "kind": "fact", "content": "Plays the guitar"},
-    {"id": "m30", "kind": "fact", "content": "Pays 28,000 rupees rent per month"},
-    {"id": "m31", "kind": "event", "content": "Biopsy results came back benign in Nov 2026"},
-    {"id": "m32", "kind": "preference", "content": "Hates phone calls and prefers texting"},
-    {"id": "m33", "kind": "fact", "content": "Grandmother lives with the parents and has diabetes"},
-    {"id": "m34", "kind": "event", "content": "Planning a Goa trip with Kabir in Feb 2027"},
-    {"id": "m35", "kind": "preference", "content": "Favourite food is rajma chawal"},
-    {"id": "m36", "kind": "fact", "content": "Is lactose intolerant"},
-    {"id": "m37", "kind": "relationship", "content": "Manager at work is named Suresh"},
-    {"id": "m38", "kind": "event", "content": "Got promoted to senior engineer in Oct 2026"},
-    {"id": "m39", "kind": "fact", "content": "Takes Kannada classes on weekends"},
-    {"id": "m40", "kind": "fact", "content": "Lives in Delhi", "superseded_by": "m01"}
+    {
+      "id": "m01",
+      "kind": "fact",
+      "content": "Lives in Bangalore, moved from Delhi in Oct 2026"
+    },
+    {
+      "id": "m02",
+      "kind": "fact",
+      "content": "Works as a backend engineer at a fintech startup"
+    },
+    {
+      "id": "m03",
+      "kind": "relationship",
+      "content": "Has an older sister named Riya"
+    },
+    {
+      "id": "m04",
+      "kind": "event",
+      "content": "Sister Riya's wedding is on 12 Dec 2026 in Jaipur"
+    },
+    {
+      "id": "m05",
+      "kind": "relationship",
+      "content": "Best friend Kabir lives in Mumbai"
+    },
+    {
+      "id": "m06",
+      "kind": "preference",
+      "content": "Is vegetarian"
+    },
+    {
+      "id": "m07",
+      "kind": "fact",
+      "content": "Is allergic to peanuts"
+    },
+    {
+      "id": "m08",
+      "kind": "preference",
+      "content": "Prefers tea over coffee because coffee gives acidity"
+    },
+    {
+      "id": "m09",
+      "kind": "fact",
+      "content": "Has a pet beagle named Bruno"
+    },
+    {
+      "id": "m10",
+      "kind": "event",
+      "content": "Bruno has a vet appointment on 25 Nov 2026"
+    },
+    {
+      "id": "m11",
+      "kind": "fact",
+      "content": "Goes to Gold's Gym in Koramangala"
+    },
+    {
+      "id": "m12",
+      "kind": "preference",
+      "content": "Is training for a half marathon in Jan 2027"
+    },
+    {
+      "id": "m13",
+      "kind": "fact",
+      "content": "Mother is a school teacher in Lucknow"
+    },
+    {
+      "id": "m14",
+      "kind": "fact",
+      "content": "Father had knee surgery in Sep 2026"
+    },
+    {
+      "id": "m15",
+      "kind": "preference",
+      "content": "Loves old Hindi songs, especially Kishore Kumar"
+    },
+    {
+      "id": "m16",
+      "kind": "preference",
+      "content": "Dislikes horror movies"
+    },
+    {
+      "id": "m17",
+      "kind": "fact",
+      "content": "Is learning the Rust programming language"
+    },
+    {
+      "id": "m18",
+      "kind": "event",
+      "content": "Has a job interview at Razorpay on 28 Nov 2026"
+    },
+    {
+      "id": "m19",
+      "kind": "fact",
+      "content": "Is saving money to buy a car next year"
+    },
+    {
+      "id": "m20",
+      "kind": "fact",
+      "content": "Commutes to work by metro"
+    },
+    {
+      "id": "m21",
+      "kind": "preference",
+      "content": "Wants to visit Japan"
+    },
+    {
+      "id": "m22",
+      "kind": "fact",
+      "content": "Speaks Hindi, English and a little Kannada"
+    },
+    {
+      "id": "m23",
+      "kind": "fact",
+      "content": "Has trouble sleeping and usually falls asleep after 2 am"
+    },
+    {
+      "id": "m24",
+      "kind": "event",
+      "content": "Spent Diwali 2026 with parents in Lucknow"
+    },
+    {
+      "id": "m25",
+      "kind": "relationship",
+      "content": "Partner Aditya is a doctor"
+    },
+    {
+      "id": "m26",
+      "kind": "event",
+      "content": "Aditya's birthday is on 3 Dec"
+    },
+    {
+      "id": "m27",
+      "kind": "fact",
+      "content": "Shares a flat in HSR Layout with flatmate Neha"
+    },
+    {
+      "id": "m28",
+      "kind": "preference",
+      "content": "Does not drink alcohol"
+    },
+    {
+      "id": "m29",
+      "kind": "fact",
+      "content": "Plays the guitar"
+    },
+    {
+      "id": "m30",
+      "kind": "fact",
+      "content": "Pays 28,000 rupees rent per month"
+    },
+    {
+      "id": "m31",
+      "kind": "event",
+      "content": "Biopsy results came back benign in Nov 2026"
+    },
+    {
+      "id": "m32",
+      "kind": "preference",
+      "content": "Hates phone calls and prefers texting"
+    },
+    {
+      "id": "m33",
+      "kind": "fact",
+      "content": "Grandmother lives with the parents and has diabetes"
+    },
+    {
+      "id": "m34",
+      "kind": "event",
+      "content": "Planning a Goa trip with Kabir in Feb 2027"
+    },
+    {
+      "id": "m35",
+      "kind": "preference",
+      "content": "Favourite food is rajma chawal"
+    },
+    {
+      "id": "m36",
+      "kind": "fact",
+      "content": "Is lactose intolerant"
+    },
+    {
+      "id": "m37",
+      "kind": "relationship",
+      "content": "Manager at work is named Suresh"
+    },
+    {
+      "id": "m38",
+      "kind": "event",
+      "content": "Got promoted to senior engineer in Oct 2026"
+    },
+    {
+      "id": "m39",
+      "kind": "fact",
+      "content": "Takes Kannada classes on weekends"
+    },
+    {
+      "id": "m40",
+      "kind": "fact",
+      "content": "Lives in Delhi",
+      "superseded_by": "m01"
+    },
+    {
+      "id": "d001",
+      "kind": "fact",
+      "content": "Has a younger cousin named Tanvi who studies in Kanpur"
+    },
+    {
+      "id": "d002",
+      "kind": "event",
+      "content": "Cousin Tanvi's engagement is in Jan 2027 in Kanpur"
+    },
+    {
+      "id": "d003",
+      "kind": "relationship",
+      "content": "College friend Rohan lives in Pune"
+    },
+    {
+      "id": "d004",
+      "kind": "event",
+      "content": "Attended Rohan's housewarming in Pune in Aug 2026"
+    },
+    {
+      "id": "d005",
+      "kind": "relationship",
+      "content": "Childhood friend Meera is a lawyer in Delhi"
+    },
+    {
+      "id": "d006",
+      "kind": "fact",
+      "content": "Meera and the user talk every Sunday night"
+    },
+    {
+      "id": "d007",
+      "kind": "fact",
+      "content": "Neighbour's cat Mishti often sits on the balcony"
+    },
+    {
+      "id": "d008",
+      "kind": "preference",
+      "content": "Wants to adopt a second dog someday"
+    },
+    {
+      "id": "d009",
+      "kind": "fact",
+      "content": "Used to do yoga every morning in college"
+    },
+    {
+      "id": "d010",
+      "kind": "fact",
+      "content": "Bought new running shoes, Asics Novablast, in Oct 2026"
+    },
+    {
+      "id": "d011",
+      "kind": "event",
+      "content": "Ran a 10 km race in Bangalore in Sep 2026"
+    },
+    {
+      "id": "d012",
+      "kind": "fact",
+      "content": "Uncle in Lucknow runs a sweet shop"
+    },
+    {
+      "id": "d013",
+      "kind": "fact",
+      "content": "Father retired from the railways in 2025"
+    },
+    {
+      "id": "d014",
+      "kind": "fact",
+      "content": "Younger brother Kartik is in class 12 in Lucknow"
+    },
+    {
+      "id": "d015",
+      "kind": "event",
+      "content": "Kartik's board exams are in Mar 2027"
+    },
+    {
+      "id": "d016",
+      "kind": "preference",
+      "content": "Likes AP Dhillon and Punjabi pop"
+    },
+    {
+      "id": "d017",
+      "kind": "preference",
+      "content": "Listens to podcasts on the metro"
+    },
+    {
+      "id": "d018",
+      "kind": "preference",
+      "content": "Favourite movie is Dil Chahta Hai"
+    },
+    {
+      "id": "d019",
+      "kind": "preference",
+      "content": "Enjoys thriller web series"
+    },
+    {
+      "id": "d020",
+      "kind": "fact",
+      "content": "Did a Python course in college"
+    },
+    {
+      "id": "d021",
+      "kind": "fact",
+      "content": "Uses Neovim for coding"
+    },
+    {
+      "id": "d022",
+      "kind": "fact",
+      "content": "Team at work uses Go and Postgres"
+    },
+    {
+      "id": "d023",
+      "kind": "event",
+      "content": "Had a final round interview at Zerodha in Sep 2026 and did not get it"
+    },
+    {
+      "id": "d024",
+      "kind": "fact",
+      "content": "Has an SBI savings account and a mutual fund SIP"
+    },
+    {
+      "id": "d025",
+      "kind": "fact",
+      "content": "Owns a second-hand Activa scooter"
+    },
+    {
+      "id": "d026",
+      "kind": "fact",
+      "content": "Took a cab to the airport last time because the metro was shut"
+    },
+    {
+      "id": "d027",
+      "kind": "preference",
+      "content": "Wants to see the Northern Lights"
+    },
+    {
+      "id": "d028",
+      "kind": "event",
+      "content": "Visited Bali with college friends in 2025"
+    },
+    {
+      "id": "d029",
+      "kind": "fact",
+      "content": "Can read Devanagari and Gurmukhi"
+    },
+    {
+      "id": "d030",
+      "kind": "event",
+      "content": "Spent Holi 2026 in Delhi with Meera"
+    },
+    {
+      "id": "d031",
+      "kind": "relationship",
+      "content": "Aditya's sister Pooja lives in Hyderabad"
+    },
+    {
+      "id": "d032",
+      "kind": "event",
+      "content": "Met Aditya at a friend's wedding in 2024"
+    },
+    {
+      "id": "d033",
+      "kind": "fact",
+      "content": "Neha works in marketing at an edtech company"
+    },
+    {
+      "id": "d034",
+      "kind": "fact",
+      "content": "The flat in HSR Layout has a small balcony garden"
+    },
+    {
+      "id": "d035",
+      "kind": "preference",
+      "content": "Likes mocktails, especially virgin mojito"
+    },
+    {
+      "id": "d036",
+      "kind": "fact",
+      "content": "Bought a Yamaha acoustic guitar in 2023"
+    },
+    {
+      "id": "d037",
+      "kind": "fact",
+      "content": "Electricity bill is around 1,500 rupees a month"
+    },
+    {
+      "id": "d038",
+      "kind": "fact",
+      "content": "Wears glasses for short-sightedness"
+    },
+    {
+      "id": "d039",
+      "kind": "preference",
+      "content": "Prefers voice notes over long texts with family"
+    },
+    {
+      "id": "d040",
+      "kind": "fact",
+      "content": "Grandfather passed away in 2022"
+    },
+    {
+      "id": "d041",
+      "kind": "event",
+      "content": "Planning a weekend trip to Coorg with Neha in Dec 2026"
+    },
+    {
+      "id": "d042",
+      "kind": "preference",
+      "content": "Likes chole bhature from a stall in Old Delhi"
+    },
+    {
+      "id": "d043",
+      "kind": "preference",
+      "content": "Does not like karela"
+    },
+    {
+      "id": "d044",
+      "kind": "fact",
+      "content": "Cooks dinner at home most weekdays"
+    },
+    {
+      "id": "d045",
+      "kind": "fact",
+      "content": "Skip-level manager is named Priya"
+    },
+    {
+      "id": "d046",
+      "kind": "event",
+      "content": "Team offsite is in Mysore in Jan 2027"
+    },
+    {
+      "id": "d047",
+      "kind": "fact",
+      "content": "Works from office three days a week"
+    },
+    {
+      "id": "d048",
+      "kind": "fact",
+      "content": "Office is in Koramangala"
+    },
+    {
+      "id": "d049",
+      "kind": "preference",
+      "content": "Wants to learn Japanese someday"
+    },
+    {
+      "id": "d050",
+      "kind": "event",
+      "content": "Celebrated Diwali 2025 in Delhi"
+    },
+    {
+      "id": "d051",
+      "kind": "fact",
+      "content": "Has a scar on the left knee from a cycling fall"
+    },
+    {
+      "id": "d052",
+      "kind": "preference",
+      "content": "Prefers window seats on flights"
+    },
+    {
+      "id": "d053",
+      "kind": "fact",
+      "content": "Is scared of dogs bigger than labradors"
+    },
+    {
+      "id": "d054",
+      "kind": "fact",
+      "content": "Gets migraines when they skip meals"
+    },
+    {
+      "id": "d055",
+      "kind": "event",
+      "content": "Got the flu in Nov 2026"
+    },
+    {
+      "id": "d056",
+      "kind": "preference",
+      "content": "Drinks green tea in the afternoon"
+    },
+    {
+      "id": "d057",
+      "kind": "preference",
+      "content": "Likes filter coffee only from one cafe near the office"
+    },
+    {
+      "id": "d058",
+      "kind": "fact",
+      "content": "Volunteers at an animal shelter once a month"
+    },
+    {
+      "id": "d059",
+      "kind": "preference",
+      "content": "Wants to run a full marathon by 2028"
+    },
+    {
+      "id": "d060",
+      "kind": "fact",
+      "content": "Started journalling in Oct 2026"
+    },
+    {
+      "id": "d061",
+      "kind": "relationship",
+      "content": "Kabir's girlfriend is named Sana"
+    },
+    {
+      "id": "d062",
+      "kind": "event",
+      "content": "Went to Kabir's birthday party in Mumbai in Jul 2026"
+    },
+    {
+      "id": "d063",
+      "kind": "fact",
+      "content": "Has a Spotify family plan shared with the sister"
+    },
+    {
+      "id": "d064",
+      "kind": "fact",
+      "content": "Has a passport that expires in 2029"
+    },
+    {
+      "id": "d065",
+      "kind": "event",
+      "content": "Applied for a Japan tourist visa in 2025 but cancelled the trip"
+    },
+    {
+      "id": "d066",
+      "kind": "preference",
+      "content": "Likes dosa from Vidyarthi Bhavan"
+    },
+    {
+      "id": "d067",
+      "kind": "fact",
+      "content": "Mother's birthday is on 14 Feb"
+    },
+    {
+      "id": "d068",
+      "kind": "fact",
+      "content": "Pays for the gym quarterly"
+    },
+    {
+      "id": "d069",
+      "kind": "preference",
+      "content": "Dislikes crowded malls on weekends"
+    },
+    {
+      "id": "d070",
+      "kind": "fact",
+      "content": "Grew up in Lucknow"
+    },
+    {
+      "id": "d071",
+      "kind": "fact",
+      "content": "Did a BTech in computer science from a college in Delhi"
+    },
+    {
+      "id": "d072",
+      "kind": "event",
+      "content": "Graduated from college in 2022"
+    },
+    {
+      "id": "d073",
+      "kind": "fact",
+      "content": "First job was at an IT services company in Noida"
+    },
+    {
+      "id": "d074",
+      "kind": "preference",
+      "content": "Likes planning trips in spreadsheets"
+    },
+    {
+      "id": "d075",
+      "kind": "fact",
+      "content": "Has two houseplants named Tulsi and Monty"
+    },
+    {
+      "id": "d076",
+      "kind": "preference",
+      "content": "Prefers mountains over beaches"
+    },
+    {
+      "id": "d077",
+      "kind": "fact",
+      "content": "Owns a Kindle"
+    },
+    {
+      "id": "d078",
+      "kind": "preference",
+      "content": "Likes rainy days"
+    },
+    {
+      "id": "d079",
+      "kind": "fact",
+      "content": "Is right-handed but plays badminton left-handed"
+    },
+    {
+      "id": "d080",
+      "kind": "event",
+      "content": "Plays badminton with colleagues on Thursdays"
+    },
+    {
+      "id": "d081",
+      "kind": "preference",
+      "content": "Does not like spicy food very much"
+    },
+    {
+      "id": "d082",
+      "kind": "relationship",
+      "content": "Riya's fiance is named Vikram"
+    },
+    {
+      "id": "d083",
+      "kind": "fact",
+      "content": "Vikram is from Udaipur"
+    },
+    {
+      "id": "d084",
+      "kind": "event",
+      "content": "Riya's engagement was in Jun 2026"
+    },
+    {
+      "id": "d085",
+      "kind": "preference",
+      "content": "Wants a simple wedding for themselves someday"
+    },
+    {
+      "id": "d086",
+      "kind": "fact",
+      "content": "Takes vitamin D supplements"
+    },
+    {
+      "id": "d087",
+      "kind": "fact",
+      "content": "Dentist appointment is due every six months"
+    },
+    {
+      "id": "d088",
+      "kind": "preference",
+      "content": "Likes the smell of petrichor"
+    },
+    {
+      "id": "d089",
+      "kind": "fact",
+      "content": "Speaks a little Punjabi with Meera"
+    },
+    {
+      "id": "d090",
+      "kind": "fact",
+      "content": "Contributes to an open source CLI tool on GitHub"
+    },
+    {
+      "id": "d091",
+      "kind": "fact",
+      "content": "Has a standing desk at home"
+    },
+    {
+      "id": "d092",
+      "kind": "fact",
+      "content": "Landlord is named Mr. Reddy"
+    },
+    {
+      "id": "d093",
+      "kind": "fact",
+      "content": "Goes home to Lucknow every two months"
+    },
+    {
+      "id": "d094",
+      "kind": "preference",
+      "content": "Likes the metro more than autos"
+    }
   ],
   "queries": [
-    {"text": "didi ki shaadi ke liye lehenga dekhna hai abhi", "relevant": ["m04"]},
-    {"text": "december mein Jaipur ki train book karni hai", "relevant": ["m04"]},
-    {"text": "दीदी की शादी में क्या पहनूं समझ नहीं आ रहा", "relevant": ["m04", "m03"]},
-    {"text": "Riya didi ka phone aaya tha aaj", "relevant": ["m03", "m04"]},
-    {"text": "Bruno ko kal doctor ke paas le jaana hai", "relevant": ["m10", "m09"]},
-    {"text": "Bruno ne aaj phir sofa faad diya", "relevant": ["m09"]},
-    {"text": "aaj gym mein leg day tha, legs dard kar rahe hain", "relevant": ["m11"]},
-    {"text": "subah 15 km run kiya, prep chal rahi hai", "relevant": ["m12"]},
-    {"text": "mummy ke school mein annual function hai", "relevant": ["m13"]},
-    {"text": "papa ab bina sahare chal paa rahe hain", "relevant": ["m14"]},
-    {"text": "Kishore da ke gaane sun ke mood theek ho gaya", "relevant": ["m15"]},
-    {"text": "dost log Conjuring dekhne bol rahe hain, mujhe nahi dekhni", "relevant": ["m16"]},
-    {"text": "borrow checker ne aaj pura din kha liya", "relevant": ["m17"]},
-    {"text": "Razorpay wala round kaise prepare karun", "relevant": ["m18"]},
-    {"text": "car ki EMI calculate kar rahi thi", "relevant": ["m19"]},
-    {"text": "metro mein aaj bahut bheed thi", "relevant": ["m20"]},
-    {"text": "Tokyo ki flights dekh rahi thi kal raat", "relevant": ["m21"]},
-    {"text": "kannada class mein aaj numbers sikhe", "relevant": ["m39", "m22"]},
-    {"text": "phir se 3 baje tak neend nahi aayi", "relevant": ["m23"]},
-    {"text": "Aditya ke birthday ke liye kya gift doon", "relevant": ["m26"]},
-    {"text": "Aditya ki aaj raat hospital mein shift hai", "relevant": ["m25"]},
-    {"text": "Neha ne phir se bartan nahi dhoye", "relevant": ["m27"]},
-    {"text": "office party mein sab peene lage, maine juice liya", "relevant": ["m28"]},
-    {"text": "guitar pe naye strings lagaye", "relevant": ["m29"]},
-    {"text": "is mahine rent dene ke baad paise hi nahi bache", "relevant": ["m30"]},
-    {"text": "report normal aayi thi na, ab tension kam hai", "relevant": ["m31"]},
-    {"text": "mujhe call mat karna please, text kar do", "relevant": ["m32"]},
-    {"text": "naani ki sugar phir badh gayi", "relevant": ["m33"]},
-    {"text": "Goa mein kahan rukein Kabir aur main", "relevant": ["m34"]},
-    {"text": "Kabir is weekend Mumbai se aa raha hai", "relevant": ["m05", "m34"]},
-    {"text": "aaj ghar pe rajma banaya", "relevant": ["m35"]},
-    {"text": "chai pe chalein? coffee se acidity hoti hai", "relevant": ["m08"]},
-    {"text": "doodh wali cheezein khaate hi pet kharab ho jaata hai", "relevant": ["m36"]},
-    {"text": "Suresh ne phir late night meeting rakh di", "relevant": ["m37"]},
-    {"text": "senior banne ke baad kaam bahut badh gaya", "relevant": ["m38"]},
-    {"text": "fintech mein kaam karna kitna stressful hai yaar", "relevant": ["m02"]},
-    {"text": "bangalore ka pehla winter hai mera", "relevant": ["m01"]},
-    {"text": "yaad hai main kahan rehti hoon?", "relevant": ["m01"]},
-    {"text": "restaurant mein paneer hi order kiya, non veg nahi khaati", "relevant": ["m06"]},
-    {"text": "thai curry mein moongfali thi, kha hi nahi paayi", "relevant": ["m07"]},
-    {"text": "Lucknow wali Diwali bahut achhi thi", "relevant": ["m24"]}
+    {
+      "text": "didi ki shaadi ke liye lehenga dekhna hai abhi",
+      "relevant": [
+        "m04"
+      ]
+    },
+    {
+      "text": "december mein Jaipur ki train book karni hai",
+      "relevant": [
+        "m04"
+      ]
+    },
+    {
+      "text": "दीदी की शादी में क्या पहनूं समझ नहीं आ रहा",
+      "relevant": [
+        "m04",
+        "m03"
+      ]
+    },
+    {
+      "text": "Riya didi ka phone aaya tha aaj",
+      "relevant": [
+        "m03",
+        "m04"
+      ]
+    },
+    {
+      "text": "Bruno ko kal doctor ke paas le jaana hai",
+      "relevant": [
+        "m10",
+        "m09"
+      ]
+    },
+    {
+      "text": "Bruno ne aaj phir sofa faad diya",
+      "relevant": [
+        "m09"
+      ]
+    },
+    {
+      "text": "aaj gym mein leg day tha, legs dard kar rahe hain",
+      "relevant": [
+        "m11"
+      ]
+    },
+    {
+      "text": "subah 15 km run kiya, prep chal rahi hai",
+      "relevant": [
+        "m12"
+      ]
+    },
+    {
+      "text": "mummy ke school mein annual function hai",
+      "relevant": [
+        "m13"
+      ]
+    },
+    {
+      "text": "papa ab bina sahare chal paa rahe hain",
+      "relevant": [
+        "m14"
+      ]
+    },
+    {
+      "text": "Kishore da ke gaane sun ke mood theek ho gaya",
+      "relevant": [
+        "m15"
+      ]
+    },
+    {
+      "text": "dost log Conjuring dekhne bol rahe hain, mujhe nahi dekhni",
+      "relevant": [
+        "m16"
+      ]
+    },
+    {
+      "text": "borrow checker ne aaj pura din kha liya",
+      "relevant": [
+        "m17"
+      ]
+    },
+    {
+      "text": "Razorpay wala round kaise prepare karun",
+      "relevant": [
+        "m18"
+      ]
+    },
+    {
+      "text": "car ki EMI calculate kar rahi thi",
+      "relevant": [
+        "m19"
+      ]
+    },
+    {
+      "text": "metro mein aaj bahut bheed thi",
+      "relevant": [
+        "m20"
+      ]
+    },
+    {
+      "text": "Tokyo ki flights dekh rahi thi kal raat",
+      "relevant": [
+        "m21"
+      ]
+    },
+    {
+      "text": "kannada class mein aaj numbers sikhe",
+      "relevant": [
+        "m39",
+        "m22"
+      ]
+    },
+    {
+      "text": "phir se 3 baje tak neend nahi aayi",
+      "relevant": [
+        "m23"
+      ]
+    },
+    {
+      "text": "Aditya ke birthday ke liye kya gift doon",
+      "relevant": [
+        "m26"
+      ]
+    },
+    {
+      "text": "Aditya ki aaj raat hospital mein shift hai",
+      "relevant": [
+        "m25"
+      ]
+    },
+    {
+      "text": "Neha ne phir se bartan nahi dhoye",
+      "relevant": [
+        "m27"
+      ]
+    },
+    {
+      "text": "office party mein sab peene lage, maine juice liya",
+      "relevant": [
+        "m28"
+      ]
+    },
+    {
+      "text": "guitar pe naye strings lagaye",
+      "relevant": [
+        "m29"
+      ]
+    },
+    {
+      "text": "is mahine rent dene ke baad paise hi nahi bache",
+      "relevant": [
+        "m30"
+      ]
+    },
+    {
+      "text": "report normal aayi thi na, ab tension kam hai",
+      "relevant": [
+        "m31"
+      ]
+    },
+    {
+      "text": "mujhe call mat karna please, text kar do",
+      "relevant": [
+        "m32"
+      ]
+    },
+    {
+      "text": "naani ki sugar phir badh gayi",
+      "relevant": [
+        "m33"
+      ]
+    },
+    {
+      "text": "Goa mein kahan rukein Kabir aur main",
+      "relevant": [
+        "m34"
+      ]
+    },
+    {
+      "text": "Kabir is weekend Mumbai se aa raha hai",
+      "relevant": [
+        "m05",
+        "m34"
+      ]
+    },
+    {
+      "text": "aaj ghar pe rajma banaya",
+      "relevant": [
+        "m35"
+      ]
+    },
+    {
+      "text": "chai pe chalein? coffee se acidity hoti hai",
+      "relevant": [
+        "m08"
+      ]
+    },
+    {
+      "text": "doodh wali cheezein khaate hi pet kharab ho jaata hai",
+      "relevant": [
+        "m36"
+      ]
+    },
+    {
+      "text": "Suresh ne phir late night meeting rakh di",
+      "relevant": [
+        "m37"
+      ]
+    },
+    {
+      "text": "senior banne ke baad kaam bahut badh gaya",
+      "relevant": [
+        "m38"
+      ]
+    },
+    {
+      "text": "fintech mein kaam karna kitna stressful hai yaar",
+      "relevant": [
+        "m02"
+      ]
+    },
+    {
+      "text": "bangalore ka pehla winter hai mera",
+      "relevant": [
+        "m01"
+      ]
+    },
+    {
+      "text": "yaad hai main kahan rehti hoon?",
+      "relevant": [
+        "m01"
+      ]
+    },
+    {
+      "text": "restaurant mein paneer hi order kiya, non veg nahi khaati",
+      "relevant": [
+        "m06"
+      ]
+    },
+    {
+      "text": "thai curry mein moongfali thi, kha hi nahi paayi",
+      "relevant": [
+        "m07"
+      ]
+    },
+    {
+      "text": "Lucknow wali Diwali bahut achhi thi",
+      "relevant": [
+        "m24"
+      ]
+    },
+    {
+      "text": "ice cream khaun kya aaj?",
+      "relevant": [
+        "m36"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "satay try karna hai is weekend",
+      "relevant": [
+        "m07"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "auto wale se Kannada mein kaise baat karun",
+      "relevant": [
+        "m22",
+        "m39"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "Seoul ya Kyoto, pehle kahan jaun",
+      "relevant": [
+        "m21"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "naani ke liye mithai leni hai",
+      "relevant": [
+        "m33"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "papa ki physio kab tak chalegi",
+      "relevant": [
+        "m14"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "Aditya ko raat ko emergency mein bula liya",
+      "relevant": [
+        "m25"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "mera manager kaun hai yaad hai?",
+      "relevant": [
+        "m37"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "flatmate ka naam kya tha mere?",
+      "relevant": [
+        "m27"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "kitna kiraya deti hoon main?",
+      "relevant": [
+        "m30"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "Delhi mein kab tak rehti thi main?",
+      "relevant": [
+        "m01"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "abhi main kis city mein hoon?",
+      "relevant": [
+        "m01"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "मेरा कुत्ता बहुत शरारती है",
+      "relevant": [
+        "m09"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "beer pong ke liye bulaya hai sabne",
+      "relevant": [
+        "m28"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "chicken biryani order karein?",
+      "relevant": [
+        "m06"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "raat ko neend ke liye kya karun",
+      "relevant": [
+        "m23"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "dad ka ghutna ab kaisa hai",
+      "relevant": [
+        "m14"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "didi ke wedding ka venue kahan hai",
+      "relevant": [
+        "m04"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "Kishore Kumar ka koi gaana suggest karo",
+      "relevant": [
+        "m15"
+      ],
+      "tag": "hard"
+    },
+    {
+      "text": "mere boyfriend kya kaam karte hain?",
+      "relevant": [
+        "m25"
+      ],
+      "tag": "hard"
+    }
   ]
 }

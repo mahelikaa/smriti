@@ -9,6 +9,7 @@ from smriti.retrieval import (
     hit_at,
     load_set,
     summarize,
+    summarize_by_tag,
 )
 
 
@@ -60,6 +61,20 @@ def test_summarize_counts_queries_not_memories():
     summary = summarize(rankings, queries)
 
     assert summary == {"queries": 2, "recall@1": 0.5, "recall@5": 0.5}
+
+
+def test_summarize_by_tag_splits_basic_and_hard():
+    queries = [
+        Query(text="q1", relevant=["a"]),
+        Query(text="q2", relevant=["b"], tag="hard"),
+    ]
+    rankings = [["a"], ["x"]]
+
+    summary = summarize_by_tag(rankings, queries)
+
+    assert summary["all"]["recall@1"] == 0.5
+    assert summary["basic"] == {"queries": 1, "recall@1": 1.0, "recall@5": 1.0}
+    assert summary["hard"] == {"queries": 1, "recall@1": 0.0, "recall@5": 0.0}
 
 
 class FlakyEmbed:
