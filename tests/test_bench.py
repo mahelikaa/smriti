@@ -1,15 +1,7 @@
 import pytest
 
-from smriti.bench import bench_url, load, recall, summarize
+from smriti.bench import load, recall, summarize
 from smriti.main import app
-
-
-def test_bench_url_only_swaps_the_database():
-    url = "postgresql://smriti:smriti@localhost:5433/smriti"
-
-    assert bench_url(url, "smriti_bench") == (
-        "postgresql://smriti:smriti@localhost:5433/smriti_bench"
-    )
 
 
 def test_summarize_reads_p50_and_p99():

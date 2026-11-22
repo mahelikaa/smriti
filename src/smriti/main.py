@@ -9,12 +9,10 @@ from fastapi.responses import JSONResponse
 from pydantic import AwareDatetime, BaseModel, Field
 
 from smriti import embed as embedding
+from smriti.db import DEFAULT_DATABASE_URL
 from smriti.embed import EMBED_MODEL, EmbeddingError, to_pgvector
 
-DATABASE_URL = os.environ.get(
-    "DATABASE_URL",
-    "postgresql://smriti:smriti@localhost:5433/smriti",
-)
+DATABASE_URL = os.environ.get("DATABASE_URL", DEFAULT_DATABASE_URL)
 
 DB_UNAVAILABLE_ERRORS = (
     OSError,

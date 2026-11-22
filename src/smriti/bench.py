@@ -6,15 +6,14 @@ import statistics
 import time
 from datetime import UTC, datetime
 from pathlib import Path
-from urllib.parse import urlsplit, urlunsplit
 
 import asyncpg
 
+from smriti.db import drop_database, recreate_database, with_database
 from smriti.embed import EMBED_DIMS, EMBED_MODEL, to_pgvector
 from smriti.main import DATABASE_URL, SEARCH_MEMORIES
 
 ROOT = Path(__file__).resolve().parents[2]
-MIGRATIONS_DIR = ROOT / "migrations"
 RESULTS_PATH = ROOT / "eval" / "search_latency.json"
 BENCH_DB = "smriti_bench"
 HEAVY_USER = "bench-heavy"
@@ -58,11 +57,6 @@ CONFIGS = {
         "SET hnsw.iterative_scan = relaxed_order",
     ],
 }
-
-
-def bench_url(url: str, db: str = BENCH_DB) -> str:
-    parts = urlsplit(url)
-    return urlunsplit(parts._replace(path=f"/{db}"))
 
 
 def summarize(latencies_ms: list[float]) -> dict:
@@ -158,19 +152,11 @@ async def measure_size(conn, total: int, queries: list[str]) -> dict:
     return report
 
 
-async def apply_migrations(conn) -> None:
-    for path in sorted(MIGRATIONS_DIR.glob("*.sql")):
-        await conn.execute(path.read_text())
-
-
 async def run(sizes: list[int]) -> list[dict]:
-    admin = await asyncpg.connect(DATABASE_URL)
-    await admin.execute(f"DROP DATABASE IF EXISTS {BENCH_DB} WITH (FORCE)")
-    await admin.execute(f"CREATE DATABASE {BENCH_DB}")
+    await recreate_database(DATABASE_URL, BENCH_DB)
     try:
-        conn = await asyncpg.connect(bench_url(DATABASE_URL))
+        conn = await asyncpg.connect(with_database(DATABASE_URL, BENCH_DB))
         try:
-            await apply_migrations(conn)
             queries = random_queries(QUERIES)
             reports = []
             for total in sizes:
@@ -181,8 +167,7 @@ async def run(sizes: list[int]) -> list[dict]:
         finally:
             await conn.close()
     finally:
-        await admin.execute(f"DROP DATABASE IF EXISTS {BENCH_DB} WITH (FORCE)")
-        await admin.close()
+        await drop_database(DATABASE_URL, BENCH_DB)
 
 
 def main() -> None:
