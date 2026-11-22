@@ -1,0 +1,2225 @@
+{
+  "model": "claude-haiku-5-5",
+  "judge_model": "claude-opus-5-5",
+  "ran_at": "2026-11-22T08:18:16+00:00",
+  "mean": {
+    "context": {
+      "recall": 1.0,
+      "precision": 1.0,
+      "skip": 1.0,
+      "supersede": 1.0
+    },
+    "dates": {
+      "recall": 1.0,
+      "precision": 1.0,
+      "skip": null,
+      "supersede": null
+    },
+    "facts": {
+      "recall": 1.0,
+      "precision": 1.0,
+      "skip": null,
+      "supersede": null
+    },
+    "moods": {
+      "recall": null,
+      "precision": null,
+      "skip": 1.0,
+      "supersede": null
+    },
+    "multi": {
+      "recall": 1.0,
+      "precision": 1.0,
+      "skip": null,
+      "supersede": null
+    },
+    "supersede": {
+      "recall": 1.0,
+      "precision": 0.714,
+      "skip": 1.0,
+      "supersede": 1.0
+    },
+    "TOTAL": {
+      "recall": 1.0,
+      "precision": 0.944,
+      "skip": 1.0,
+      "supersede": 1.0
+    }
+  },
+  "runs": [
+    {
+      "summary": {
+        "cases": 41,
+        "recall": 1.0,
+        "precision": 0.944,
+        "skip": 1.0,
+        "supersede": 1.0
+      },
+      "extract_cost": 0.00599,
+      "cases": [
+        {
+          "id": "fact-01",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "lives in Kothrud, Pune",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-02",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 2,
+          "correct": 2,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Sister Riya's wedding is in December 2026",
+              "importance": 4,
+              "supersedes": []
+            },
+            {
+              "kind": "relationship",
+              "content": "Has a sister named Riya",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-03",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Is vegetarian and does not eat eggs",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-04",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Has a brother named Arjun who works at Flipkart in Bangalore",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-05",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Started going to the gym, aiming for 6 AM workouts every day",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-06",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Gets acidity from drinking coffee and therefore drinks tea instead",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-07",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Owns a beagle named Bruno",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-08",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Is in the final year of a BCom at Delhi University",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-09",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Has a mother who has diabetes and eats a separately prepared diet",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-10",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Usually falls asleep while listening to Arijit Singh songs",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-11",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "is afraid of flying",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-01",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "starts a new job in Gurgaon on 19 Nov 2026",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-02",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Riya's mehendi ceremony is on 20 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-03",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Attended Riya's mehendi ceremony on 20 Nov 2026",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-04",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "has a doctor appointment on 23 Nov 2026",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-05",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Semester exams begin on 23 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-06",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "passed driving test on 21 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-07",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Is going to Goa with friends during the week of 23 Nov 2026",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-08",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "has a flight to Mumbai on 22 Nov 2026 at 7 am",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "mood-01",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-02",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-03",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-04",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-05",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-06",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-07",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-08",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "supersede-01",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 2,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Moved to Bangalore and rented a flat in Koramangala",
+              "importance": 4,
+              "supersedes": [
+                11
+              ]
+            },
+            {
+              "kind": "fact",
+              "content": "Lives in Koramangala, Bangalore",
+              "importance": 4,
+              "supersedes": [
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-02",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 2,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Left TCS and joined Razorpay as of 21 Nov 2026",
+              "importance": 4,
+              "supersedes": [
+                21
+              ]
+            },
+            {
+              "kind": "fact",
+              "content": "Works at Razorpay",
+              "importance": 5,
+              "supersedes": [
+                21
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-03",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Broke up with Kabir on 21 Nov 2026",
+              "importance": 4,
+              "supersedes": [
+                31
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-04",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Sister Riya's wedding is postponed to March 2027",
+              "importance": 4,
+              "supersedes": [
+                41
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-05",
+          "category": "supersede",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": true,
+          "memories": []
+        },
+        {
+          "id": "supersede-06",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Favourite food is biryani",
+              "importance": 3,
+              "supersedes": [
+                61
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-01",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Agreed to lead the office Diwali event",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "context-02",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "context-03",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Biopsy results came back normal on 21 Nov 2026",
+              "importance": 4,
+              "supersedes": [
+                81
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-04",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "context-05",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "No longer goes to Gold's Gym in Indiranagar because it became too crowded",
+              "importance": 2,
+              "supersedes": [
+                91
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-06",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "multi-01",
+          "category": "multi",
+          "expected": 4,
+          "found": 4,
+          "saved": 4,
+          "correct": 4,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Name is Ananya",
+              "importance": 5,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Is 24 years old",
+              "importance": 4,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Is originally from Jaipur",
+              "importance": 4,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Currently lives in Noida",
+              "importance": 5,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "multi-02",
+          "category": "multi",
+          "expected": 2,
+          "found": 2,
+          "saved": 2,
+          "correct": 2,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Their father retired in October 2026",
+              "importance": 3,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Their father now spends his time gardening",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "summary": {
+        "cases": 41,
+        "recall": 1.0,
+        "precision": 0.944,
+        "skip": 1.0,
+        "supersede": 1.0
+      },
+      "extract_cost": 0.00596,
+      "cases": [
+        {
+          "id": "fact-01",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Lives in Kothrud, Pune",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-02",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 2,
+          "correct": 2,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Sister Riya's wedding is in December 2026",
+              "importance": 4,
+              "supersedes": []
+            },
+            {
+              "kind": "relationship",
+              "content": "Has a sister named Riya",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-03",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Is vegetarian and does not eat eggs",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-04",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Has a brother named Arjun who works at Flipkart in Bangalore",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-05",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Started going to the gym, aiming for 6 AM workouts daily",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-06",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Gets acidity from coffee and therefore drinks tea instead",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-07",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Has a beagle named Bruno",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-08",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Is pursuing a BCom at Delhi University and is in their final year",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-09",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Mother has diabetes and has separate meals prepared for her",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-10",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Usually falls asleep while listening to Arijit Singh songs",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-11",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "is afraid of flying",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-01",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "starts a new job in Gurgaon on 19 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-02",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Riya's mehendi ceremony is on 20 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-03",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Attended Riya's mehendi ceremony on 20 Nov 2026 and enjoyed it",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-04",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Has a doctor appointment on 23 Nov 2026",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-05",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "semester exams start on 23 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-06",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "passed their driving test on 21 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-07",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Is traveling to Goa with friends in the week of 23 Nov 2026",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-08",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "has a flight to Mumbai on 22 Nov 2026 at 7 am",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "mood-01",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-02",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-03",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-04",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-05",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-06",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-07",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-08",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "supersede-01",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 2,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Moved to Bangalore and rented a flat in Koramangala",
+              "importance": 4,
+              "supersedes": [
+                11
+              ]
+            },
+            {
+              "kind": "fact",
+              "content": "Lives in Koramangala, Bangalore",
+              "importance": 4,
+              "supersedes": [
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-02",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 2,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Left TCS and joined Razorpay as of 21 Nov 2026",
+              "importance": 4,
+              "supersedes": [
+                21
+              ]
+            },
+            {
+              "kind": "fact",
+              "content": "Works at Razorpay",
+              "importance": 5,
+              "supersedes": [
+                21
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-03",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Broke up with Kabir on 21 Nov 2026",
+              "importance": 4,
+              "supersedes": [
+                31
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-04",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Sister Riya's wedding is postponed to March 2027",
+              "importance": 4,
+              "supersedes": [
+                41
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-05",
+          "category": "supersede",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": true,
+          "memories": []
+        },
+        {
+          "id": "supersede-06",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Favourite food is biryani, as of Nov 2026",
+              "importance": 3,
+              "supersedes": [
+                61
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-01",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Agreed to lead the office Diwali event",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "context-02",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "context-03",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Biopsy results came back normal on 21 Nov 2026",
+              "importance": 3,
+              "supersedes": [
+                81
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-04",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "context-05",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "No longer goes to Gold's Gym in Indiranagar because it became too crowded",
+              "importance": 3,
+              "supersedes": [
+                91
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-06",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "multi-01",
+          "category": "multi",
+          "expected": 4,
+          "found": 4,
+          "saved": 4,
+          "correct": 4,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Name is Ananya",
+              "importance": 5,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Is 24 years old",
+              "importance": 4,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Originally from Jaipur",
+              "importance": 3,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Currently lives in Noida",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "multi-02",
+          "category": "multi",
+          "expected": 2,
+          "found": 2,
+          "saved": 2,
+          "correct": 2,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Father retired last month (Oct 2026)",
+              "importance": 3,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Father enjoys gardening now that he is retired",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "summary": {
+        "cases": 41,
+        "recall": 1.0,
+        "precision": 0.943,
+        "skip": 1.0,
+        "supersede": 1.0
+      },
+      "extract_cost": 0.00599,
+      "cases": [
+        {
+          "id": "fact-01",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Lives in Kothrud, Pune",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-02",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Sister Riya's wedding is in December 2026",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-03",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Is vegetarian and does not eat eggs",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-04",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Has a brother named Arjun who works at Flipkart in Bangalore",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-05",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Has started going to the gym daily at 6 AM",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-06",
+          "category": "facts",
+          "expected": 2,
+          "found": 2,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Gets acidity from coffee and therefore drinks tea instead",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-07",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Owns a beagle named Bruno",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-08",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Is studying BCom at Delhi University, in final year",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-09",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "relationship",
+              "content": "Mother has diabetes and eats separately prepared meals",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-10",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Can only fall asleep while listening to Arijit Singh songs",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "fact-11",
+          "category": "facts",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "is afraid of flying",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-01",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "starts a new job in Gurgaon on 19 Nov 2026",
+              "importance": 4,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-02",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Riya's mehendi ceremony is on 20 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-03",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Attended Riya's mehendi ceremony on 20 Nov 2026 and enjoyed it a lot",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-04",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Has a doctor appointment on 23 Nov 2026",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-05",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "has semester exams starting Monday, 23 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-06",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "passed their driving test on 21 Nov 2026",
+              "importance": 3,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-07",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Plans a trip to Goa with friends in the week of 23 Nov 2026",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "date-08",
+          "category": "dates",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "has a flight to Mumbai on 22 Nov 2026 at 7:00 AM",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "mood-01",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-02",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-03",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-04",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-05",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-06",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-07",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "mood-08",
+          "category": "moods",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "supersede-01",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 2,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Moved to Bangalore and rented a flat in Koramangala",
+              "importance": 4,
+              "supersedes": [
+                11
+              ]
+            },
+            {
+              "kind": "fact",
+              "content": "Lives in Koramangala, Bangalore",
+              "importance": 4,
+              "supersedes": [
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-02",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 2,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Left TCS and joined Razorpay as of 21 Nov 2026",
+              "importance": 4,
+              "supersedes": [
+                21
+              ]
+            },
+            {
+              "kind": "fact",
+              "content": "Works at Razorpay",
+              "importance": 5,
+              "supersedes": [
+                21
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-03",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Broke up with Kabir on 21 Nov 2026",
+              "importance": 4,
+              "supersedes": [
+                31
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-04",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Sister Riya's wedding is postponed to March 2027",
+              "importance": 4,
+              "supersedes": [
+                41
+              ]
+            }
+          ]
+        },
+        {
+          "id": "supersede-05",
+          "category": "supersede",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": true,
+          "memories": []
+        },
+        {
+          "id": "supersede-06",
+          "category": "supersede",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "preference",
+              "content": "Favourite food is biryani",
+              "importance": 3,
+              "supersedes": [
+                61
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-01",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Agreed to lead the office Diwali event",
+              "importance": 2,
+              "supersedes": [
+                71
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-02",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "context-03",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Biopsy results came back normal on 21 Nov 2026",
+              "importance": 4,
+              "supersedes": [
+                81
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-04",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "context-05",
+          "category": "context",
+          "expected": 1,
+          "found": 1,
+          "saved": 1,
+          "correct": 1,
+          "skip_ok": null,
+          "supersede_ok": true,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "No longer goes to Gold's Gym in Indiranagar, finding it too crowded",
+              "importance": 2,
+              "supersedes": [
+                91
+              ]
+            }
+          ]
+        },
+        {
+          "id": "context-06",
+          "category": "context",
+          "expected": 0,
+          "found": 0,
+          "saved": 0,
+          "correct": 0,
+          "skip_ok": true,
+          "supersede_ok": null,
+          "memories": []
+        },
+        {
+          "id": "multi-01",
+          "category": "multi",
+          "expected": 4,
+          "found": 4,
+          "saved": 4,
+          "correct": 4,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "fact",
+              "content": "Name is Ananya",
+              "importance": 5,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Is 24 years old",
+              "importance": 4,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Is originally from Jaipur",
+              "importance": 4,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Currently lives in Noida",
+              "importance": 5,
+              "supersedes": []
+            }
+          ]
+        },
+        {
+          "id": "multi-02",
+          "category": "multi",
+          "expected": 2,
+          "found": 2,
+          "saved": 2,
+          "correct": 2,
+          "skip_ok": null,
+          "supersede_ok": null,
+          "memories": [
+            {
+              "kind": "event",
+              "content": "Father retired in October 2026",
+              "importance": 3,
+              "supersedes": []
+            },
+            {
+              "kind": "fact",
+              "content": "Father enjoys gardening after retiring",
+              "importance": 2,
+              "supersedes": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

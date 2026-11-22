@@ -134,8 +134,19 @@ def test_cost_one_million_input_tokens():
 
 
 def test_cost_mixed():
-    # 1000 × $4/M = 0.004, 500 × $20/M = 0.010
     assert cost_usd(1000, 500) == pytest.approx(0.014)
+
+
+def test_cost_uses_the_model_price():
+    assert cost_usd(1_000_000, 1_000_000, "claude-haiku-5-5") == pytest.approx(0.60)
+
+
+async def test_sends_the_requested_model():
+    client = FakeClient(result=fake_response(memories=[]))
+
+    await extract_memories(client, "hello", model="claude-haiku-5-5")
+
+    assert client.messages.calls[0]["model"] == "claude-haiku-5-5"
 
 
 async def test_usage_passes_through():

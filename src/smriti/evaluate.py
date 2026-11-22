@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import json
 from dataclasses import asdict, dataclass
@@ -7,13 +8,14 @@ from pathlib import Path
 import anthropic
 from pydantic import BaseModel
 
-from smriti.extract import MODEL, cost_usd, extract_memories
+from smriti.extract import MODEL, PRICES_PER_MTOK, cost_usd, extract_memories
 
 ROOT = Path(__file__).resolve().parents[2]
 CASES_PATH = ROOT / "eval" / "cases.jsonl"
-RESULTS_PATH = ROOT / "eval" / "results.json"
+RESULTS_DIR = ROOT / "eval" / "results"
 JUDGE_MODEL = "claude-opus-5-5"
 CONCURRENCY = 4
+METRICS = ("recall", "precision", "skip", "supersede")
 DEFAULT_SENT_AT = datetime(2026, 11, 21, 4, 30, tzinfo=UTC)
 
 JUDGE_SYSTEM = """\
@@ -143,73 +145,119 @@ async def judge(
     return verdicts, response.usage.input_tokens, response.usage.output_tokens
 
 
-async def run_case(client, sem: asyncio.Semaphore, case: Case) -> dict:
+async def run_case(client, sem: asyncio.Semaphore, case: Case, model: str) -> dict:
     async with sem:
-        result = await extract_memories(client, case.text, case.known, case.sent_at)
+        result = await extract_memories(
+            client, case.text, case.known, case.sent_at, model
+        )
         verdicts, judge_in, judge_out = await judge(client, case, result.memories)
-    score = score_case(case, result.memories, verdicts)
     return {
-        "score": score,
+        "score": score_case(case, result.memories, verdicts),
         "memories": result.memories,
         "verdicts": [v.model_dump() for v in verdicts],
-        "cost": cost_usd(
-            result.input_tokens + judge_in, result.output_tokens + judge_out
-        ),
+        "extract_cost": cost_usd(result.input_tokens, result.output_tokens, model),
+        "judge_cost": cost_usd(judge_in, judge_out, JUDGE_MODEL),
     }
 
 
-def print_report(cases: list[Case], runs: list[dict]) -> dict:
-    scores = [r["score"] for r in runs]
+def by_category(scores: list[CaseScore]) -> dict:
     categories = sorted({s.category for s in scores})
+    out = {c: summarize([s for s in scores if s.category == c]) for c in categories}
+    out["TOTAL"] = summarize(scores)
+    return out
+
+
+def mean_of(tables: list[dict]) -> dict:
+    out = {}
+    for cat in tables[0]:
+        out[cat] = {}
+        for metric in METRICS:
+            values = [t[cat][metric] for t in tables if t[cat][metric] is not None]
+            out[cat][metric] = round(sum(values) / len(values), 3) if values else None
+    return out
+
+
+def cell(value: float | None) -> str:
+    return "-" if value is None else f"{value:.0%}"
+
+
+def print_report(cases: list[Case], runs: list[list[dict]], model: str) -> dict:
+    tables = [by_category([r["score"] for r in run]) for run in runs]
+    mean = mean_of(tables)
+
+    print(f"model {model}, {len(runs)} run(s), mean:")
     print(f"{'category':<12}{'recall':>8}{'precision':>11}{'skip':>7}{'supersede':>11}")
-    by_category = {}
-    for cat in categories + ["TOTAL"]:
-        group = scores if cat == "TOTAL" else [s for s in scores if s.category == cat]
-        summary = summarize(group)
-        by_category[cat] = summary
-        cells = [summary[k] for k in ("recall", "precision", "skip", "supersede")]
-        shown = ["-" if c is None else f"{c:.0%}" for c in cells]
-        print(f"{cat:<12}{shown[0]:>8}{shown[1]:>11}{shown[2]:>7}{shown[3]:>11}")
+    for cat, row in mean.items():
+        cells = [cell(row[m]) for m in METRICS]
+        print(f"{cat:<12}{cells[0]:>8}{cells[1]:>11}{cells[2]:>7}{cells[3]:>11}")
 
-    print("\nmisses:")
-    for case, run in zip(cases, runs):
-        s = run["score"]
-        if s.found < s.expected or s.correct < s.saved or s.supersede_ok is False:
-            saved = [m["content"] for m in run["memories"]] or ["(nothing)"]
-            print(f"  {case.id}: expected {case.expect} | saved {saved}")
+    print("\nper run:")
+    for i, t in enumerate(tables, 1):
+        total = t["TOTAL"]
+        print(f"  run {i}: " + "  ".join(f"{m} {cell(total[m])}" for m in METRICS))
 
-    total_cost = sum(r["cost"] for r in runs)
-    print(f"\ncost: ${total_cost:.3f}")
-    return by_category
+    print("\nmisses (runs missed / runs):")
+    for i, case in enumerate(cases):
+        bad = [
+            run[i]
+            for run in runs
+            if run[i]["score"].found < run[i]["score"].expected
+            or run[i]["score"].correct < run[i]["score"].saved
+            or run[i]["score"].supersede_ok is False
+        ]
+        if bad:
+            saved = [m["content"] for m in bad[-1]["memories"]] or ["(nothing)"]
+            print(f"  {case.id} {len(bad)}/{len(runs)}: saved {saved}")
+
+    extract = sum(r["extract_cost"] for run in runs for r in run) / len(runs)
+    judge_cost = sum(r["judge_cost"] for run in runs for r in run) / len(runs)
+    print(f"\ncost per run: extraction ${extract:.4f}, judge ${judge_cost:.4f}")
+    print(f"extraction per case: ${extract / len(cases):.5f}")
+    return mean
 
 
-async def run_eval(cases: list[Case]) -> list[dict]:
+async def run_eval(cases: list[Case], model: str, runs: int) -> list[list[dict]]:
     client = anthropic.AsyncAnthropic(max_retries=4, timeout=60.0)
     sem = asyncio.Semaphore(CONCURRENCY)
     try:
-        return await asyncio.gather(*(run_case(client, sem, c) for c in cases))
+        results = []
+        for _ in range(runs):
+            results.append(
+                await asyncio.gather(*(run_case(client, sem, c, model) for c in cases))
+            )
+        return results
     finally:
         await client.close()
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", default=MODEL, choices=sorted(PRICES_PER_MTOK))
+    parser.add_argument("--runs", type=int, default=1)
+    args = parser.parse_args()
+
     cases = load_cases()
-    runs = asyncio.run(run_eval(cases))
-    summary = print_report(cases, runs)
-    RESULTS_PATH.write_text(
+    runs = asyncio.run(run_eval(cases, args.model, args.runs))
+    mean = print_report(cases, runs, args.model)
+
+    RESULTS_DIR.mkdir(exist_ok=True)
+    (RESULTS_DIR / f"{args.model}.json").write_text(
         json.dumps(
             {
-                "model": MODEL,
+                "model": args.model,
                 "judge_model": JUDGE_MODEL,
                 "ran_at": datetime.now(UTC).isoformat(timespec="seconds"),
-                "summary": summary,
-                "cases": [
+                "mean": mean,
+                "runs": [
                     {
-                        **asdict(r["score"]),
-                        "memories": r["memories"],
-                        "verdicts": r["verdicts"],
+                        "summary": by_category([r["score"] for r in run])["TOTAL"],
+                        "extract_cost": round(sum(r["extract_cost"] for r in run), 5),
+                        "cases": [
+                            {**asdict(r["score"]), "memories": r["memories"]}
+                            for r in run
+                        ],
                     }
-                    for r in runs
+                    for run in runs
                 ],
             },
             indent=2,

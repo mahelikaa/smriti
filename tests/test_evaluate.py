@@ -5,6 +5,7 @@ from smriti.evaluate import (
     Verdict,
     judge,
     load_cases,
+    mean_of,
     score_case,
     summarize,
 )
@@ -132,3 +133,17 @@ async def test_judge_skips_claude_when_nothing_saved():
     verdicts, _, _ = await judge(NoCallClient(), make_case(["Lives in Pune"]), [])
 
     assert verdicts == []
+
+
+def test_mean_of_averages_runs_and_skips_missing_values():
+    run1 = {"TOTAL": {"recall": 1.0, "precision": 0.8, "skip": None, "supersede": 1.0}}
+    run2 = {"TOTAL": {"recall": 0.5, "precision": 0.9, "skip": None, "supersede": None}}
+
+    mean = mean_of([run1, run2])
+
+    assert mean["TOTAL"] == {
+        "recall": 0.75,
+        "precision": 0.85,
+        "skip": None,
+        "supersede": 1.0,
+    }

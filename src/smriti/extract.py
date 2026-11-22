@@ -10,8 +10,10 @@ MODEL = "claude-opus-5-5"
 MAX_TOKENS = 4096
 USER_TZ = ZoneInfo("Asia/Kolkata")
 
-PRICE_IN_PER_MTOK = 4.00  # USD per million input tokens (claude-opus-5-5)
-PRICE_OUT_PER_MTOK = 20.00  # USD per million output tokens, thinking included
+PRICES_PER_MTOK = {
+    "claude-opus-5-5": (4.00, 20.00),
+    "claude-haiku-5-5": (0.10, 0.50),
+}
 
 SYSTEM_PROMPT = """\
 You extract long-term memories about the USER from one chat message.
@@ -63,10 +65,9 @@ class ExtractionError(Exception):
         self.retryable = retryable
 
 
-def cost_usd(input_tokens: int, output_tokens: int) -> float:
-    return (
-        input_tokens * PRICE_IN_PER_MTOK + output_tokens * PRICE_OUT_PER_MTOK
-    ) / 1_000_000
+def cost_usd(input_tokens: int, output_tokens: int, model: str = MODEL) -> float:
+    price_in, price_out = PRICES_PER_MTOK[model]
+    return (input_tokens * price_in + output_tokens * price_out) / 1_000_000
 
 
 def format_sent_at(sent_at: datetime) -> str:
@@ -95,10 +96,11 @@ async def extract_memories(
     text: str,
     known: list[dict] | None = None,
     sent_at: datetime | None = None,
+    model: str = MODEL,
 ) -> ExtractResult:
     try:
         response = await client.messages.parse(
-            model=MODEL,
+            model=model,
             max_tokens=MAX_TOKENS,
             system=SYSTEM_PROMPT,
             messages=[
