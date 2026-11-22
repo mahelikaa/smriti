@@ -1,0 +1,94 @@
+{
+  "ran_at": "2026-11-22T14:44:37+00:00",
+  "k": 5,
+  "queries": 500,
+  "dims": 1024,
+  "sizes": [
+    {
+      "memories": 10000,
+      "users": {
+        "bench-heavy": 1000,
+        "bench-0": 100
+      },
+      "load_s": 0.8,
+      "exact/bench-0": {
+        "p50_ms": 0.64,
+        "p99_ms": 1.42
+      },
+      "exact/bench-heavy": {
+        "p50_ms": 2.8,
+        "p99_ms": 3.05
+      },
+      "hnsw_build_s": 9.0,
+      "planner_picks/bench-0": "user index + sort",
+      "planner_picks/bench-heavy": "user index + sort",
+      "hnsw/bench-0": {
+        "p50_ms": 1.19,
+        "p99_ms": 1.71,
+        "rows_returned": 0.56,
+        "recall@5": 0.112
+      },
+      "hnsw/bench-heavy": {
+        "p50_ms": 1.28,
+        "p99_ms": 3.94,
+        "rows_returned": 4.36,
+        "recall@5": 0.326
+      },
+      "hnsw_iterative/bench-0": {
+        "p50_ms": 5.75,
+        "p99_ms": 23.54,
+        "rows_returned": 5,
+        "recall@5": 0.928
+      },
+      "hnsw_iterative/bench-heavy": {
+        "p50_ms": 1.37,
+        "p99_ms": 2.43,
+        "rows_returned": 5,
+        "recall@5": 0.39
+      }
+    },
+    {
+      "memories": 100000,
+      "users": {
+        "bench-heavy": 10000,
+        "bench-0": 100
+      },
+      "load_s": 7.2,
+      "exact/bench-0": {
+        "p50_ms": 0.65,
+        "p99_ms": 1.91
+      },
+      "exact/bench-heavy": {
+        "p50_ms": 26.72,
+        "p99_ms": 40.48
+      },
+      "hnsw_build_s": 153.2,
+      "planner_picks/bench-0": "user index + sort",
+      "planner_picks/bench-heavy": "user index + sort",
+      "hnsw/bench-0": {
+        "p50_ms": 3.68,
+        "p99_ms": 6.57,
+        "rows_returned": 0.06,
+        "recall@5": 0.011
+      },
+      "hnsw/bench-heavy": {
+        "p50_ms": 3.65,
+        "p99_ms": 5.82,
+        "rows_returned": 4.91,
+        "recall@5": 0.078
+      },
+      "hnsw_iterative/bench-0": {
+        "p50_ms": 40.41,
+        "p99_ms": 79.64,
+        "rows_returned": 5,
+        "recall@5": 0.377
+      },
+      "hnsw_iterative/bench-heavy": {
+        "p50_ms": 3.78,
+        "p99_ms": 9.56,
+        "rows_returned": 5,
+        "recall@5": 0.082
+      }
+    }
+  ]
+}
