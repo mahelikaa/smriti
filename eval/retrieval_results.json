@@ -1,0 +1,590 @@
+{
+  "model": "voyage-4",
+  "ran_at": "2026-11-22T08:08:26+00:00",
+  "summary": {
+    "queries": 41,
+    "recall@1": 0.878,
+    "recall@5": 1.0
+  },
+  "queries": [
+    {
+      "text": "didi ki shaadi ke liye lehenga dekhna hai abhi",
+      "relevant": [
+        "m04"
+      ],
+      "top": [
+        "m04: Sister Riya's wedding is on 12 Dec 2026 in Jaipur",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m03: Has an older sister named Riya",
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m13: Mother is a school teacher in Lucknow"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "december mein Jaipur ki train book karni hai",
+      "relevant": [
+        "m04"
+      ],
+      "top": [
+        "m04: Sister Riya's wedding is on 12 Dec 2026 in Jaipur",
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m26: Aditya's birthday is on 3 Dec",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m18: Has a job interview at Razorpay on 28 Nov 2026"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "दीदी की शादी में क्या पहनूं समझ नहीं आ रहा",
+      "relevant": [
+        "m04",
+        "m03"
+      ],
+      "top": [
+        "m04: Sister Riya's wedding is on 12 Dec 2026 in Jaipur",
+        "m03: Has an older sister named Riya",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m25: Partner Aditya is a doctor",
+        "m35: Favourite food is rajma chawal"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Riya didi ka phone aaya tha aaj",
+      "relevant": [
+        "m03",
+        "m04"
+      ],
+      "top": [
+        "m03: Has an older sister named Riya",
+        "m32: Hates phone calls and prefers texting",
+        "m04: Sister Riya's wedding is on 12 Dec 2026 in Jaipur",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m27: Shares a flat in HSR Layout with flatmate Neha"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Bruno ko kal doctor ke paas le jaana hai",
+      "relevant": [
+        "m10",
+        "m09"
+      ],
+      "top": [
+        "m10: Bruno has a vet appointment on 25 Nov 2026",
+        "m09: Has a pet beagle named Bruno",
+        "m25: Partner Aditya is a doctor",
+        "m14: Father had knee surgery in Sep 2026",
+        "m31: Biopsy results came back benign in Nov 2026"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Bruno ne aaj phir sofa faad diya",
+      "relevant": [
+        "m09"
+      ],
+      "top": [
+        "m10: Bruno has a vet appointment on 25 Nov 2026",
+        "m09: Has a pet beagle named Bruno",
+        "m14: Father had knee surgery in Sep 2026",
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m19: Is saving money to buy a car next year"
+      ],
+      "rank": 2
+    },
+    {
+      "text": "aaj gym mein leg day tha, legs dard kar rahe hain",
+      "relevant": [
+        "m11"
+      ],
+      "top": [
+        "m11: Goes to Gold's Gym in Koramangala",
+        "m12: Is training for a half marathon in Jan 2027",
+        "m14: Father had knee surgery in Sep 2026",
+        "m36: Is lactose intolerant",
+        "m06: Is vegetarian"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "subah 15 km run kiya, prep chal rahi hai",
+      "relevant": [
+        "m12"
+      ],
+      "top": [
+        "m12: Is training for a half marathon in Jan 2027",
+        "m11: Goes to Gold's Gym in Koramangala",
+        "m23: Has trouble sleeping and usually falls asleep after 2 am",
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m20: Commutes to work by metro"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "mummy ke school mein annual function hai",
+      "relevant": [
+        "m13"
+      ],
+      "top": [
+        "m13: Mother is a school teacher in Lucknow",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m14: Father had knee surgery in Sep 2026",
+        "m39: Takes Kannada classes on weekends",
+        "m12: Is training for a half marathon in Jan 2027"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "papa ab bina sahare chal paa rahe hain",
+      "relevant": [
+        "m14"
+      ],
+      "top": [
+        "m33: Grandmother lives with the parents and has diabetes",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m14: Father had knee surgery in Sep 2026",
+        "m13: Mother is a school teacher in Lucknow",
+        "m23: Has trouble sleeping and usually falls asleep after 2 am"
+      ],
+      "rank": 3
+    },
+    {
+      "text": "Kishore da ke gaane sun ke mood theek ho gaya",
+      "relevant": [
+        "m15"
+      ],
+      "top": [
+        "m15: Loves old Hindi songs, especially Kishore Kumar",
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m05: Best friend Kabir lives in Mumbai",
+        "m03: Has an older sister named Riya",
+        "m39: Takes Kannada classes on weekends"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "dost log Conjuring dekhne bol rahe hain, mujhe nahi dekhni",
+      "relevant": [
+        "m16"
+      ],
+      "top": [
+        "m16: Dislikes horror movies",
+        "m28: Does not drink alcohol",
+        "m05: Best friend Kabir lives in Mumbai",
+        "m23: Has trouble sleeping and usually falls asleep after 2 am",
+        "m36: Is lactose intolerant"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "borrow checker ne aaj pura din kha liya",
+      "relevant": [
+        "m17"
+      ],
+      "top": [
+        "m17: Is learning the Rust programming language",
+        "m23: Has trouble sleeping and usually falls asleep after 2 am",
+        "m31: Biopsy results came back benign in Nov 2026",
+        "m19: Is saving money to buy a car next year",
+        "m36: Is lactose intolerant"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Razorpay wala round kaise prepare karun",
+      "relevant": [
+        "m18"
+      ],
+      "top": [
+        "m18: Has a job interview at Razorpay on 28 Nov 2026",
+        "m30: Pays 28,000 rupees rent per month",
+        "m11: Goes to Gold's Gym in Koramangala",
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m17: Is learning the Rust programming language"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "car ki EMI calculate kar rahi thi",
+      "relevant": [
+        "m19"
+      ],
+      "top": [
+        "m19: Is saving money to buy a car next year",
+        "m30: Pays 28,000 rupees rent per month",
+        "m20: Commutes to work by metro",
+        "m25: Partner Aditya is a doctor",
+        "m39: Takes Kannada classes on weekends"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "metro mein aaj bahut bheed thi",
+      "relevant": [
+        "m20"
+      ],
+      "top": [
+        "m20: Commutes to work by metro",
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m05: Best friend Kabir lives in Mumbai",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m30: Pays 28,000 rupees rent per month"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Tokyo ki flights dekh rahi thi kal raat",
+      "relevant": [
+        "m21"
+      ],
+      "top": [
+        "m21: Wants to visit Japan",
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m23: Has trouble sleeping and usually falls asleep after 2 am",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m01: Lives in Bangalore, moved from Delhi in Oct 2026"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "kannada class mein aaj numbers sikhe",
+      "relevant": [
+        "m39",
+        "m22"
+      ],
+      "top": [
+        "m39: Takes Kannada classes on weekends",
+        "m22: Speaks Hindi, English and a little Kannada",
+        "m17: Is learning the Rust programming language",
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m26: Aditya's birthday is on 3 Dec"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "phir se 3 baje tak neend nahi aayi",
+      "relevant": [
+        "m23"
+      ],
+      "top": [
+        "m23: Has trouble sleeping and usually falls asleep after 2 am",
+        "m08: Prefers tea over coffee because coffee gives acidity",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m36: Is lactose intolerant",
+        "m28: Does not drink alcohol"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Aditya ke birthday ke liye kya gift doon",
+      "relevant": [
+        "m26"
+      ],
+      "top": [
+        "m26: Aditya's birthday is on 3 Dec",
+        "m25: Partner Aditya is a doctor",
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m19: Is saving money to buy a car next year",
+        "m24: Spent Diwali 2026 with parents in Lucknow"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Aditya ki aaj raat hospital mein shift hai",
+      "relevant": [
+        "m25"
+      ],
+      "top": [
+        "m25: Partner Aditya is a doctor",
+        "m26: Aditya's birthday is on 3 Dec",
+        "m23: Has trouble sleeping and usually falls asleep after 2 am",
+        "m14: Father had knee surgery in Sep 2026",
+        "m27: Shares a flat in HSR Layout with flatmate Neha"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Neha ne phir se bartan nahi dhoye",
+      "relevant": [
+        "m27"
+      ],
+      "top": [
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m28: Does not drink alcohol",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m13: Mother is a school teacher in Lucknow",
+        "m03: Has an older sister named Riya"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "office party mein sab peene lage, maine juice liya",
+      "relevant": [
+        "m28"
+      ],
+      "top": [
+        "m28: Does not drink alcohol",
+        "m08: Prefers tea over coffee because coffee gives acidity",
+        "m36: Is lactose intolerant",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m37: Manager at work is named Suresh"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "guitar pe naye strings lagaye",
+      "relevant": [
+        "m29"
+      ],
+      "top": [
+        "m29: Plays the guitar",
+        "m17: Is learning the Rust programming language",
+        "m15: Loves old Hindi songs, especially Kishore Kumar",
+        "m19: Is saving money to buy a car next year",
+        "m39: Takes Kannada classes on weekends"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "is mahine rent dene ke baad paise hi nahi bache",
+      "relevant": [
+        "m30"
+      ],
+      "top": [
+        "m30: Pays 28,000 rupees rent per month",
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m19: Is saving money to buy a car next year",
+        "m05: Best friend Kabir lives in Mumbai",
+        "m24: Spent Diwali 2026 with parents in Lucknow"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "report normal aayi thi na, ab tension kam hai",
+      "relevant": [
+        "m31"
+      ],
+      "top": [
+        "m31: Biopsy results came back benign in Nov 2026",
+        "m23: Has trouble sleeping and usually falls asleep after 2 am",
+        "m28: Does not drink alcohol",
+        "m25: Partner Aditya is a doctor",
+        "m30: Pays 28,000 rupees rent per month"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "mujhe call mat karna please, text kar do",
+      "relevant": [
+        "m32"
+      ],
+      "top": [
+        "m32: Hates phone calls and prefers texting",
+        "m06: Is vegetarian",
+        "m22: Speaks Hindi, English and a little Kannada",
+        "m28: Does not drink alcohol",
+        "m05: Best friend Kabir lives in Mumbai"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "naani ki sugar phir badh gayi",
+      "relevant": [
+        "m33"
+      ],
+      "top": [
+        "m33: Grandmother lives with the parents and has diabetes",
+        "m36: Is lactose intolerant",
+        "m07: Is allergic to peanuts",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m03: Has an older sister named Riya"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Goa mein kahan rukein Kabir aur main",
+      "relevant": [
+        "m34"
+      ],
+      "top": [
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m05: Best friend Kabir lives in Mumbai",
+        "m01: Lives in Bangalore, moved from Delhi in Oct 2026",
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m11: Goes to Gold's Gym in Koramangala"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Kabir is weekend Mumbai se aa raha hai",
+      "relevant": [
+        "m05",
+        "m34"
+      ],
+      "top": [
+        "m05: Best friend Kabir lives in Mumbai",
+        "m34: Planning a Goa trip with Kabir in Feb 2027",
+        "m39: Takes Kannada classes on weekends",
+        "m01: Lives in Bangalore, moved from Delhi in Oct 2026",
+        "m24: Spent Diwali 2026 with parents in Lucknow"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "aaj ghar pe rajma banaya",
+      "relevant": [
+        "m35"
+      ],
+      "top": [
+        "m35: Favourite food is rajma chawal",
+        "m06: Is vegetarian",
+        "m03: Has an older sister named Riya",
+        "m36: Is lactose intolerant",
+        "m24: Spent Diwali 2026 with parents in Lucknow"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "chai pe chalein? coffee se acidity hoti hai",
+      "relevant": [
+        "m08"
+      ],
+      "top": [
+        "m08: Prefers tea over coffee because coffee gives acidity",
+        "m36: Is lactose intolerant",
+        "m06: Is vegetarian",
+        "m28: Does not drink alcohol",
+        "m35: Favourite food is rajma chawal"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "doodh wali cheezein khaate hi pet kharab ho jaata hai",
+      "relevant": [
+        "m36"
+      ],
+      "top": [
+        "m36: Is lactose intolerant",
+        "m08: Prefers tea over coffee because coffee gives acidity",
+        "m07: Is allergic to peanuts",
+        "m06: Is vegetarian",
+        "m35: Favourite food is rajma chawal"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "Suresh ne phir late night meeting rakh di",
+      "relevant": [
+        "m37"
+      ],
+      "top": [
+        "m23: Has trouble sleeping and usually falls asleep after 2 am",
+        "m37: Manager at work is named Suresh",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m39: Takes Kannada classes on weekends"
+      ],
+      "rank": 2
+    },
+    {
+      "text": "senior banne ke baad kaam bahut badh gaya",
+      "relevant": [
+        "m38"
+      ],
+      "top": [
+        "m38: Got promoted to senior engineer in Oct 2026",
+        "m37: Manager at work is named Suresh",
+        "m02: Works as a backend engineer at a fintech startup",
+        "m39: Takes Kannada classes on weekends",
+        "m17: Is learning the Rust programming language"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "fintech mein kaam karna kitna stressful hai yaar",
+      "relevant": [
+        "m02"
+      ],
+      "top": [
+        "m02: Works as a backend engineer at a fintech startup",
+        "m18: Has a job interview at Razorpay on 28 Nov 2026",
+        "m37: Manager at work is named Suresh",
+        "m17: Is learning the Rust programming language",
+        "m27: Shares a flat in HSR Layout with flatmate Neha"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "bangalore ka pehla winter hai mera",
+      "relevant": [
+        "m01"
+      ],
+      "top": [
+        "m01: Lives in Bangalore, moved from Delhi in Oct 2026",
+        "m39: Takes Kannada classes on weekends",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m34: Planning a Goa trip with Kabir in Feb 2027"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "yaad hai main kahan rehti hoon?",
+      "relevant": [
+        "m01"
+      ],
+      "top": [
+        "m27: Shares a flat in HSR Layout with flatmate Neha",
+        "m01: Lives in Bangalore, moved from Delhi in Oct 2026",
+        "m05: Best friend Kabir lives in Mumbai",
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m13: Mother is a school teacher in Lucknow"
+      ],
+      "rank": 2
+    },
+    {
+      "text": "restaurant mein paneer hi order kiya, non veg nahi khaati",
+      "relevant": [
+        "m06"
+      ],
+      "top": [
+        "m06: Is vegetarian",
+        "m36: Is lactose intolerant",
+        "m35: Favourite food is rajma chawal",
+        "m07: Is allergic to peanuts",
+        "m28: Does not drink alcohol"
+      ],
+      "rank": 1
+    },
+    {
+      "text": "thai curry mein moongfali thi, kha hi nahi paayi",
+      "relevant": [
+        "m07"
+      ],
+      "top": [
+        "m06: Is vegetarian",
+        "m35: Favourite food is rajma chawal",
+        "m36: Is lactose intolerant",
+        "m07: Is allergic to peanuts",
+        "m08: Prefers tea over coffee because coffee gives acidity"
+      ],
+      "rank": 4
+    },
+    {
+      "text": "Lucknow wali Diwali bahut achhi thi",
+      "relevant": [
+        "m24"
+      ],
+      "top": [
+        "m24: Spent Diwali 2026 with parents in Lucknow",
+        "m13: Mother is a school teacher in Lucknow",
+        "m04: Sister Riya's wedding is on 12 Dec 2026 in Jaipur",
+        "m35: Favourite food is rajma chawal",
+        "m01: Lives in Bangalore, moved from Delhi in Oct 2026"
+      ],
+      "rank": 1
+    }
+  ]
+}
