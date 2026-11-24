@@ -1,5 +1,8 @@
+import argparse
 import asyncio
 import json
+import statistics
+import time
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -9,6 +12,7 @@ from pydantic import BaseModel
 from smriti import embed as embedding
 from smriti.embed import EMBED_MODEL, EmbeddingError, to_pgvector
 from smriti.main import DATABASE_URL, SEARCH_MEMORIES
+from smriti.rerank import CANDIDATES, rerank
 
 ROOT = Path(__file__).resolve().parents[2]
 SET_PATH = ROOT / "eval" / "retrieval.json"
@@ -121,7 +125,9 @@ async def seed(conn, data: RetrievalSet, vectors: list[list[float]]) -> dict[int
     return {db_id: key for key, db_id in db_ids.items()}
 
 
-async def run(data: RetrievalSet) -> list[list[str]]:
+async def run(
+    data: RetrievalSet, rerank_model: str | None = None
+) -> tuple[list[list[str]], list[float]]:
     async with embedding.make_client() as client:
         doc_vectors = await embed_with_retry(
             client, [m.content for m in data.memories], "document"
@@ -130,30 +136,48 @@ async def run(data: RetrievalSet) -> list[list[str]]:
             client, [q.text for q in data.queries], "query"
         )
 
-    conn = await asyncpg.connect(DATABASE_URL)
-    tx = conn.transaction()
-    await tx.start()
-    try:
-        keys = await seed(conn, data, doc_vectors)
-        rankings = []
-        for v in query_vectors:
-            rows = await conn.fetch(
-                SEARCH_MEMORIES, EVAL_USER, to_pgvector(v), EMBED_MODEL, K
-            )
-            rankings.append([keys[r["id"]] for r in rows])
-        return rankings
-    finally:
-        await tx.rollback()
-        await conn.close()
+        conn = await asyncpg.connect(DATABASE_URL)
+        tx = conn.transaction()
+        await tx.start()
+        try:
+            keys = await seed(conn, data, doc_vectors)
+            rankings, rerank_ms = [], []
+            limit = CANDIDATES if rerank_model else K
+            for q, v in zip(data.queries, query_vectors):
+                rows = await conn.fetch(
+                    SEARCH_MEMORIES, EVAL_USER, to_pgvector(v), EMBED_MODEL, limit
+                )
+                if rerank_model:
+                    start = time.perf_counter()
+                    order = await rerank(
+                        client, q.text, [r["content"] for r in rows], K, rerank_model
+                    )
+                    rerank_ms.append((time.perf_counter() - start) * 1000)
+                    rows = [rows[i] for i, _ in order]
+                rankings.append([keys[r["id"]] for r in rows])
+            return rankings, rerank_ms
+        finally:
+            await tx.rollback()
+            await conn.close()
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--rerank", choices=["rerank-3", "rerank-3-lite"])
+    args = parser.parse_args()
+
     data = load_set()
-    rankings = asyncio.run(run(data))
+    rankings, rerank_ms = asyncio.run(run(data, args.rerank))
     summary = summarize_by_tag(rankings, data.queries)
     content = {m.id: m.content for m in data.memories}
+    latency = None
+    if rerank_ms:
+        cuts = statistics.quantiles(rerank_ms, n=100, method="inclusive")
+        latency = {"p50_ms": round(cuts[49]), "p95_ms": round(cuts[94])}
 
-    print(f"{len(data.memories)} memories")
+    print(f"{len(data.memories)} memories, rerank: {args.rerank or 'off'}")
+    if latency:
+        print(f"rerank latency p50 {latency['p50_ms']} ms, p95 {latency['p95_ms']} ms")
     for tag, s in summary.items():
         print(
             f"{tag:<6} {s['queries']:>3} queries   "
@@ -164,10 +188,15 @@ def main() -> None:
         if not hit_at(r, q.relevant, K):
             print(f"  {q.text!r}: wanted {q.relevant} | got {r}")
 
-    RESULTS_PATH.write_text(
+    suffix = f"-{args.rerank}" if args.rerank else ""
+    path = RESULTS_PATH.with_name(f"{RESULTS_PATH.stem}{suffix}.json")
+    path.write_text(
         json.dumps(
             {
                 "model": EMBED_MODEL,
+                "rerank_model": args.rerank,
+                "candidates": CANDIDATES if args.rerank else None,
+                "rerank_latency": latency,
                 "ran_at": datetime.now(UTC).isoformat(timespec="seconds"),
                 "memories": len(data.memories),
                 "summary": summary,

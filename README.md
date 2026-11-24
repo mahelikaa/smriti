@@ -17,7 +17,8 @@ moods, facts that stopped being true, and anything the user asks it to drop.
 | Extraction cost | $0.00018 per message |
 | Search p99, 100k memories, heaviest user holds 10k | 40 ms |
 | Search p99, typical user (100 memories) | 2 ms |
-| Retrieval recall@5 / recall@1, 134 memories, 61 queries | 95% / 64% |
+| Retrieval recall@1 / recall@5, 134 memories, 61 queries | 64% / 95% |
+| Same, with `?rerank=true` (Voyage rerank-3, +427 ms p50) | 80% / 95% |
 
 ## How it works
 
@@ -44,7 +45,8 @@ flowchart LR
    related memories. It returns typed memories, which may supersede old ones
    ("moved to Bangalore" replaces "lives in Gurgaon").
 4. Each memory is embedded with Voyage and stored. Search embeds the query and
-   returns the closest live memories for that user.
+   returns the closest live memories for that user. With `?rerank=true` it
+   takes the 20 closest and lets a reranker reorder them.
 
 ## Remembering and forgetting
 
@@ -75,6 +77,13 @@ fixed the row count but pushed p99 to 80 ms with 38% recall. A btree index on
 `(user_id, embedding_model)` plus an exact sort is faster and exact, because
 latency depends on how many memories one user has, not the table size.
 
+**Reranking is opt-in.** Voyage rerank-3 over the top 20 lifts recall@1 from
+64% to 80% (basic queries 66% to 85%), but adds 427 ms at p50 and 750 ms at
+p95 to a search that otherwise takes under 40 ms. The cheaper rerank-3-lite
+only reached 67% and dropped recall@5 to 88%. So the caller decides: a chat
+reply that can wait asks for `rerank=true`, anything latency-bound does not.
+If the reranker fails, search returns the vector order instead of an error.
+
 **Postgres as the queue.** Jobs live next to the data, so a turn and its job
 are committed together and there is no second system to run.
 
@@ -84,9 +93,11 @@ Voyage clients are faked, so CI needs no API keys.
 
 ## Known weaknesses
 
-- **recall@1 is 64%.** With many similar memories (a sister's wedding and a
-  cousin's engagement), the right one is in the top 5 but often not first.
-  A reranker is the next thing to try.
+- **recall@1 is 64% without the reranker, 80% with it.** With many similar
+  memories (a sister's wedding and a cousin's engagement), the right one is
+  in the top 5 but often not first. The reranker fixes most of these but costs
+  ~0.4 s, and on the hard set it trades two misses for two new ones
+  (recall@5 there goes 95% to 85%).
 - **Embeddings miss one-step reasoning.** "satay try karna hai" does not find
   "is allergic to peanuts".
 - **The eval sets are small and written by one person.** The 61-case set was
@@ -122,6 +133,7 @@ uv run pytest
 uv run --env-file .env python -m smriti.evaluate --runs 3
 uv run --env-file .env python -m smriti.evaluate --cases eval/heldout.jsonl
 uv run --env-file .env python -m smriti.retrieval
+uv run --env-file .env python -m smriti.retrieval --rerank rerank-3
 uv run python -m smriti.bench --sizes 10000 100000
 ```
 
@@ -130,7 +142,7 @@ uv run python -m smriti.bench --sizes 10000 100000
 | `src/smriti/main.py` | API |
 | `src/smriti/worker.py`, `jobs.py` | job queue and worker |
 | `src/smriti/extract.py` | Claude prompt and parsing |
-| `src/smriti/embed.py`, `backfill.py` | Voyage embeddings |
+| `src/smriti/embed.py`, `rerank.py`, `backfill.py` | Voyage embeddings and reranking |
 | `src/smriti/evaluate.py`, `retrieval.py`, `bench.py` | evals and benchmark |
 | `migrations/` | schema |
 | `eval/` | cases and results |

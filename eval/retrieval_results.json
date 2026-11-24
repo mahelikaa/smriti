@@ -1,6 +1,9 @@
 {
   "model": "voyage-4",
-  "ran_at": "2026-11-22T21:51:50+00:00",
+  "rerank_model": null,
+  "candidates": null,
+  "rerank_latency": null,
+  "ran_at": "2026-11-24T18:30:00+00:00",
   "memories": 134,
   "summary": {
     "all": {

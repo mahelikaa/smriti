@@ -1,3 +1,4 @@
+import logging
 import os
 from contextlib import asynccontextmanager
 from datetime import UTC
@@ -15,8 +16,11 @@ from smriti.db import (
     create_pool_with_retry,
 )
 from smriti.embed import EMBED_MODEL, EmbeddingError, to_pgvector
+from smriti.rerank import CANDIDATES, RerankError, rerank
 
 DATABASE_URL = os.environ.get("DATABASE_URL", DEFAULT_DATABASE_URL)
+
+log = logging.getLogger("smriti.api")
 
 INSERT_TURN = """
 INSERT INTO turns (user_id, external_id, role, text, sent_at)
@@ -314,6 +318,7 @@ class MemoryHit(BaseModel):
 
 class MemorySearch(BaseModel):
     items: list[MemoryHit]
+    reranked: bool
 
 
 @app.get("/v1/users/{user_id}/memories/search", response_model=MemorySearch)
@@ -321,14 +326,29 @@ async def search_memories(
     request: Request,
     q: str = Query(min_length=1, max_length=500),
     k: int = Query(5, ge=1, le=20),
+    rerank_results: bool = Query(False, alias="rerank"),
     user_id: str = Path(min_length=1, max_length=128),
 ):
-    [query_vector] = await embedding.embed(request.app.state.embed_client, [q], "query")
+    client = request.app.state.embed_client
+    [query_vector] = await embedding.embed(client, [q], "query")
+    limit = max(k, CANDIDATES) if rerank_results else k
     async with db_conn(request) as conn:
         rows = await conn.fetch(
-            SEARCH_MEMORIES, user_id, to_pgvector(query_vector), EMBED_MODEL, k
+            SEARCH_MEMORIES, user_id, to_pgvector(query_vector), EMBED_MODEL, limit
         )
-    return {"items": [dict(row) for row in rows]}
+    rows = [dict(row) for row in rows]
+
+    if not rerank_results or not rows:
+        return {"items": rows[:k], "reranked": False}
+    try:
+        order = await rerank(client, q, [r["content"] for r in rows], k)
+    except RerankError as e:
+        log.warning("rerank failed (%s), returning vector order", e)
+        return {"items": rows[:k], "reranked": False}
+    return {
+        "items": [{**rows[i], "score": score} for i, score in order],
+        "reranked": True,
+    }
 
 
 class MemoryOut(BaseModel):
