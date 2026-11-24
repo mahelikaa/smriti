@@ -13,3 +13,33 @@
 {"id": "ho-13", "category": "heldout", "text": "agar promotion nahi mila toh March mein resign kar dungi", "known": [{"id": 231, "content": "Works at Infosys"}], "expect": ["Plans to resign in March if they do not get a promotion"], "supersedes": []}
 {"id": "ho-14", "category": "heldout", "text": "main Tamil hoon but Mumbai mein badi hui, Marathi bhi aati hai", "expect": ["Is Tamil", "Grew up in Mumbai", "Speaks Marathi"]}
 {"id": "ho-15", "category": "heldout", "sent_at": "2026-11-21T04:30:00+00:00", "text": "parson raat ko hi Pune se wapas aayi", "expect": ["Returned from Pune on the night of 19 Nov 2026"]}
+{"id": "ho-16", "category": "heldout", "text": "meri nani 90 saal ki hain aur abhi bhi roz walk pe jaati hain", "expect": ["Grandmother is 90 and still walks every day"]}
+{"id": "ho-17", "category": "heldout", "text": "main CA ki taiyari kar rahi hoon, May mein attempt hai", "expect": ["Is preparing for the CA exam, attempting it in May 2027"]}
+{"id": "ho-18", "category": "heldout", "text": "yaar ye baarish kab rukegi", "expect": []}
+{"id": "ho-19", "category": "heldout", "text": "accha suno, kal milte hain", "expect": []}
+{"id": "ho-20", "category": "heldout", "text": "mujhe cats se allergy hai, aankhein laal ho jaati hain", "expect": ["Is allergic to cats"]}
+{"id": "ho-21", "category": "heldout", "known": [{"id": 241, "content": "Works at Accenture"}], "text": "Accenture mein aaj 5 saal pure ho gaye", "expect": ["Completed 5 years at Accenture on 21 Nov 2026"], "supersedes": []}
+{"id": "ho-22", "category": "heldout", "known": [{"id": 251, "content": "Has a girlfriend named Tara"}], "text": "Tara aur maine engagement kar li!!", "expect": ["Got engaged to Tara"]}
+{"id": "ho-23", "category": "heldout", "text": "Sunday ko mera birthday hai", "expect": ["Birthday is on 22 Nov"]}
+{"id": "ho-24", "category": "heldout", "text": "bachpan mein Dubai mein rehti thi, 10 saal tak", "expect": ["Lived in Dubai until age 10"]}
+{"id": "ho-25", "category": "heldout", "text": "papa ne mere liye scooty li, red wali", "expect": ["Father bought them a red scooter"]}
+{"id": "ho-26", "category": "heldout", "text": "main type 1 diabetic hoon, insulin leti hoon", "expect": ["Has type 1 diabetes and takes insulin"]}
+{"id": "ho-27", "category": "heldout", "text": "agle mahine se work from home band, office jaana padega roz", "expect": ["Has to go to the office every day from Dec 2026"]}
+{"id": "ho-28", "category": "heldout", "text": "kya bakwaas movie thi, paise barbaad", "expect": []}
+{"id": "ho-29", "category": "heldout", "known": [{"id": 271, "content": "Is learning French"}], "text": "French chhod di, ab Spanish seekh rahi hoon", "expect": ["Is learning Spanish (dropped French)"], "supersedes": [271]}
+{"id": "ho-30", "category": "heldout", "text": "meri best friend Zoya Canada shift ho gayi pichle saal", "expect": ["Best friend Zoya moved to Canada in 2025"]}
+{"id": "ho-31", "category": "heldout", "text": "ghar pe sirf Marwari bolte hain", "expect": ["Speaks Marwari at home"]}
+{"id": "ho-32", "category": "heldout", "text": "kaash main bhi coding seekh pati", "expect": ["Wishes they could learn coding"]}
+{"id": "ho-33", "category": "heldout", "text": "haan obviously main 5 baje uthti hoon 😂 10 baje se pehle aankh nahi khulti", "expect": ["Does not wake up before 10 am"]}
+{"id": "ho-34", "category": "heldout", "known": [{"id": 281, "content": "Lives in a rented flat in Pune"}], "text": "agar loan approve hua toh Wakad mein flat le lungi", "expect": ["Plans to buy a flat in Wakad if the loan is approved"], "supersedes": []}
+{"id": "ho-35", "category": "heldout", "text": "mera bhai Navy mein hai, Vizag posted", "expect": ["Brother is in the Navy, posted in Vizag"]}
+{"id": "ho-36", "category": "heldout", "text": "2 hafte baad Thailand trip hai", "expect": ["Has a Thailand trip around 5 Dec 2026"]}
+{"id": "ho-37", "category": "heldout", "text": "kal raat ko fever tha, ab theek hoon", "expect": []}
+{"id": "ho-38", "category": "heldout", "known": [{"id": 291, "content": "Was asked what they do for work"}], "text": "UX designer hoon, Zomato mein", "expect": ["Works as a UX designer at Zomato"]}
+{"id": "ho-39", "category": "heldout", "text": "Mumbai ki local mein kabhi travel nahi kiya", "expect": ["Has never travelled on a Mumbai local train"]}
+{"id": "ho-40", "category": "heldout", "text": "mere husband Rahul chef hain", "expect": ["Husband Rahul is a chef"]}
+{"id": "ho-41", "category": "heldout", "text": "pichli Diwali pe papa ka accident hua tha, ab theek hain", "expect": ["Father had an accident around Diwali 2025 and has recovered"]}
+{"id": "ho-42", "category": "heldout", "known": [{"id": 301, "content": "Plays football on weekends"}], "text": "knee injury ke baad football band kar diya", "expect": ["Stopped playing football after a knee injury"], "supersedes": [301]}
+{"id": "ho-43", "category": "heldout", "text": "Insta pe 20k followers hain mere, food blog chalati hoon", "expect": ["Runs a food blog on Instagram with 20k followers"]}
+{"id": "ho-44", "category": "heldout", "text": "okk", "expect": []}
+{"id": "ho-45", "category": "heldout", "text": "soch rahi hoon Bangalore ya Hyderabad, dono jagah offer hai", "expect": ["Has job offers in Bangalore and Hyderabad and is deciding between them"]}

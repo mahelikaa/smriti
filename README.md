@@ -1,6 +1,6 @@
 # smriti
 
-**100% recall and 93% precision extracting memories from held-out Hinglish chats, at $0.00017 a message; search p99 40 ms at 100k memories.**
+**97% recall (38/39 facts) and 91% precision extracting memories from 45 held-out Hinglish messages, at $0.00018 a message; search p99 40 ms at 100k memories.**
 
 [![ci](https://github.com/mahelikaa/smriti/actions/workflows/ci.yml/badge.svg)](https://github.com/mahelikaa/smriti/actions/workflows/ci.yml)
 
@@ -13,8 +13,8 @@ moods, facts that stopped being true, and anything the user asks it to drop.
 
 | | |
 |---|---|
-| Extraction, 15 held-out Hinglish messages (Claude Haiku) | 100% recall, 93% precision |
-| Extraction cost | $0.00017 per message |
+| Extraction, 45 held-out Hinglish messages, 3 runs (Claude Haiku) | 97% recall (38/39 facts), 91% precision |
+| Extraction cost | $0.00018 per message |
 | Search p99, 100k memories, heaviest user holds 10k | 40 ms |
 | Search p99, typical user (100 memories) | 2 ms |
 | Retrieval recall@5 / recall@1, 134 memories, 61 queries | 95% / 64% |
@@ -65,8 +65,8 @@ flowchart LR
 
 **Claude Haiku, not Opus.** On the 61-case dev set Opus reached 98% recall
 against Haiku's 94% before prompt fixes, at 34× the cost per message. After
-the fixes Haiku hits 100% on that set and on the held-out set, at $0.00017 a
-message.
+the fixes Haiku hits 100% on that set and 97% on the held-out set, at
+$0.00018 a message.
 
 **No HNSW index.** At 100k memories a global HNSW index takes about 40
 nearest neighbours and then filters by user. A typical user owns 0.1% of the
@@ -90,11 +90,13 @@ Voyage clients are faked, so CI needs no API keys.
 - **Embeddings miss one-step reasoning.** "satay try karna hai" does not find
   "is allergic to peanuts".
 - **The eval sets are small and written by one person.** The 61-case set was
-  used to tune the prompt, so only the 15 held-out cases give an honest
+  used to tune the prompt, so only the 45 held-out messages give an honest
   extraction number. Opus results are from before the last prompt change.
-- **The held-out set has one disputed label.** "Hyderabad ki biryani ka koi
-  muqabla nahi" was labelled as small talk; Haiku saved it as a food
-  preference, which is arguably right.
+- **Most held-out misses are judgement calls.** "Hyderabad ki biryani ka koi
+  muqabla nahi" and a rant about a bad movie were labelled as small talk;
+  Haiku saved them as preferences. The one missed fact, "runs a food blog on
+  Instagram with 20k followers", was saved as two separate memories, which
+  the judge did not count. Labels were left as written before the run.
 
 ## Run it
 
