@@ -1,7 +1,7 @@
 [project]
 name = "smriti"
 version = "0.1.0"
-description = "Add your description here"
+description = "Long-term memory for a Hinglish chat companion"
 readme = "README.md"
 authors = [
     { name = "mahelika", email = "imahelika@gmail.com" }
